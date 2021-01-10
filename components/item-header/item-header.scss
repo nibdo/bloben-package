@@ -1,0 +1,34 @@
+//noinspection CssUnknownTarget
+@import "bloben-common/globals/theme.scss";
+
+.item-header__wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  @media (min-width: 750px) {
+    padding: 16px 48px 0 48px;
+  }
+}
+.item-header__tags-container {
+  display: flex;
+  flex-direction: row;
+}
+.item-header__container-col {
+  display: flex;
+  flex-direction: row;
+}
+.item-header__date-container {
+  margin-top: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @media (min-width: 750px) {
+    margin-top: 24px;
+  }
+}
+
+.item-header__date-text {
+  font-size: 1rem;
+  color: $GRAY_600;
+}

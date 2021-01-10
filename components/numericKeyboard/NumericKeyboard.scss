@@ -1,0 +1,47 @@
+@import "bloben-common/globals/theme.scss";
+
+.numeric-keyboard__container {
+  width: 100%;
+  height: 50%;
+  max-height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.numeric-keyboard__row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+
+.key__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.key__button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: 6rem;
+  width: 6rem;
+  border-radius: 3rem !important;
+  background: rgba(128, 128, 128, 0.35) !important;
+}
+
+.key__button-disabled {
+  @extend .key__button;
+  background: none !important;
+}
+
+.key__text {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: $text;
+}

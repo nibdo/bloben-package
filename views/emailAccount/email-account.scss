@@ -1,0 +1,38 @@
+@import "bloben-common/globals/theme.scss";
+
+.email-account__container {
+  display: flex;
+  flex-direction: column;
+  margin: 24px 8px 24px 8px;
+}
+
+.email-account__row {
+  display: flex;
+  flex-direction: row;
+}
+
+.email-account__text {
+  color: $text;
+  font-size: 1.5rem;
+}
+
+.email-account__text-dark {
+  @extend .email-account__text;
+  color: $textDark;
+}
+
+.email-account__icon {
+  margin-left: 16px;
+  width: 20px;
+  height: 20px;
+}
+
+.email-account__icon-warn {
+  @extend .email-account__icon;
+  fill: #a0a007;
+}
+
+.email-account__icon-success {
+  @extend .email-account__icon;
+  fill: #189518;
+}

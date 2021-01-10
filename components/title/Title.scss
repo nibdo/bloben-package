@@ -1,0 +1,17 @@
+//noinspection CssUnknownTarget
+@import "bloben-common/globals/theme.scss";
+
+.mobile-title__text {
+  font-size: 3.4rem;
+  padding: 0;
+  margin: 0 0 24px 24px;
+  @media (min-width: 750px) {
+    display: none;
+  }
+}
+.mobile-title__text-desktop {
+  @extend .mobile-title__text;
+  @media (min-width: 750px) {
+    display: flex;
+  }
+}

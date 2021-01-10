@@ -1,0 +1,61 @@
+@import "bloben-common/globals/theme.scss";
+
+.settings-item__wrapper {
+  display: flex;
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+  border-radius: 8px !important;
+  padding: 6px 12px 6px 12px !important;
+  min-height: 50px;
+  margin-bottom: 4px !important;
+  width: 100% !important;
+}
+.settings-item__container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.settings-item__text-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 16px;
+  flex: 1;
+}
+
+.settings-item__title {
+  color: $text;
+  font-size: 1.4rem;
+  //margin: 6px 0px 2px 0px;
+  text-align: start;
+}
+.settings-item__title-dark {
+  @extend .settings-item__title;
+  color: $textDark;
+}
+.settings-item__description {
+  color: $gray;
+  font-size: 1.2rem;
+  text-align: start;
+}
+.settings-item__description-dark {
+  @extend .settings-item__description;
+  color: $ICON_GRAY_DARK;
+}
+.settings-item__value {
+  color: $PRIMARY_LIGHT;
+  font-size: 1.4rem;
+  text-align: end;
+  margin-right: 8px;
+}
+.settings-item__value-dark {
+  @extend .settings-item__value;
+  color: $PRIMARY_DARK;
+}
+.settings-item__value-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+

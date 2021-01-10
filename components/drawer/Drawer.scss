@@ -1,0 +1,95 @@
+@import "bloben-common/globals/theme.scss";
+
+$DRAWER_WIDTH_DESKTOP: 170px;
+$DRAWER_WIDTH_MOBILE: '100%';
+
+.drawer__wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  @media (min-width: 750px) {
+    width: $DRAWER_WIDTH_DESKTOP;
+    //border-right: solid 1px $BORDER_GRAY_LIGHT;
+    background: $GRAY_900;
+  }
+  @media (max-width: 750px) {
+    height: 100%;
+    padding: 0;
+    margin: 24px;
+  }
+}
+
+.drawer__wrapper-dark {
+  @extend .drawer__wrapper;
+  @media (min-width: 750px) {
+    border-right: solid 1px $BORDER_GRAY_DARK;
+  }
+}
+.drawer__header {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 6px;
+  @media (min-width: 750px) {
+    padding: 16px;
+  }
+}
+.drawer__container {
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  @media (min-width: 750px) {
+  }
+}
+.drawer__row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+
+.drawer__title {
+  font-size: 2rem;
+  margin: 0;
+  padding: 0 0 0 4px;
+  color: $textDark;
+  @media (min-width: 750px) {
+    font-size: 1.8rem;
+  }
+}
+.drawer__title-dark {
+  @extend .drawer__title;
+  color: $textDark;
+}
+
+.drawer__nav-button {
+  background: transparent !important;
+  border-radius: 24px !important;
+  flex-direction: row;
+  justify-content: flex-start !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+  height: 45px;
+  margin-top: 2px !important;
+  margin-bottom: 2px !important;
+}
+
+.drawer-nav-icon {
+  fill: $GRAY_400;
+  width: 22px;
+  margin-right: 8px;
+}
+.drawer__nav-text {
+  color: $GRAY_400;
+  font-size: 1.3rem;
+}
+
+.drawer__button-desktop {
+  padding: 8px 16px 8px 16px !important;
+  color: $text !important;
+}

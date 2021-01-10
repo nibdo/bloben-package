@@ -1,0 +1,71 @@
+@import "bloben-common/globals/theme.scss";
+
+.snackbar__container {
+  position: fixed;
+  bottom: 25px;
+  width: 80%;
+  left: 5%;
+  margin: 0 auto;
+  background-color: $GRAY_800;
+  display: none;
+  flex-direction: row;
+  z-index: 999;
+  height: 50px;
+  border-radius: 6px;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 4px 16px 4px 16px;
+  @media (min-width: 750px) {
+    max-width: 400px;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+}
+
+.snackbar__container-visible {
+  @extend .snackbar__container;
+  display: flex;
+}
+
+.snackbar__container-dark {
+  @extend .snackbar__container;
+  background-color: $ICON_GRAY_DARK;
+}
+.snackbar__container-visible-dark {
+@extend .snackbar__container-dark;
+  display: flex;
+}
+.snackbar__text {
+  color: $GRAY_200;
+  font-size: 1.4rem;
+}
+
+.snackbar__up {
+  animation-name: snackbar__move-up;
+  animation-delay: 0s;
+  animation-duration: 0.3s;
+}
+
+@keyframes snackbar__move-up {
+  0% {
+    bottom: -140px;
+  }
+  100% {
+    bottom: 25px;
+  }
+}
+
+.snackbar__down {
+  animation-name: snackbar__move-down;
+  animation-delay: 0s;
+  animation-duration: 0.3s;
+}
+
+@keyframes snackbar__move-down {
+  0% {
+    bottom: 25px;
+  }
+  100% {
+    bottom: -140px;
+  }
+}

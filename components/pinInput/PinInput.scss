@@ -1,0 +1,51 @@
+@import "bloben-common/globals/theme.scss";
+
+.pin-input__container {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 30px;
+  @media (min-height: 600px) {
+    margin-bottom: 100px;
+  }
+}
+
+.pin-input__field-wrapper {
+  display: flex;
+  justify-content: center;
+  height: auto;
+  flex: 1
+}
+
+.pin-input__field-container {
+  display: flex;
+  position: relative;
+  height: auto;
+  justify-content: center;
+
+}
+
+.pin-input__row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.numeric-keyboard__row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+.pin-input__text {
+  text-align: center;
+  min-width: 20px;
+  font-size: 2.8rem;
+  font-weight: 600;
+  color: $text;
+  position: absolute;
+  bottom: 2px;
+  border-bottom: solid 1.5px gray;
+}

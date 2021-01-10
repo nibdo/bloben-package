@@ -1,0 +1,53 @@
+@import "bloben-common/globals/theme.scss";
+
+.drawer-item__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+  height: 45px;
+  width: 100%;
+  border-radius: 8px !important;
+  background: transparent;
+  @media (max-width: 750px) {
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;  }
+}
+
+.drawer-item__container--selected {
+  background-color: $grayLight !important;
+}
+.drawer-item__container--selected-dark {
+  @extend .drawer-item__container--selected;
+  background-color: $primarySelectedDark !important;
+}
+
+.drawer-item__title {
+  font-size: 1.4rem;
+  color: $text !important;
+  @media (min-width: 750px) {
+    color: $grayDark !important;
+  }
+}
+.drawer-item__title-dark {
+  @extend .drawer-item__title;
+  color: $textDark !important;
+}
+.drawer-item__title--selected {
+  color: $text !important;
+  font-weight: 600;
+  @media (min-width: 750px) {
+    color: $textDark !important;
+  }
+}
+.drawer-item__title--selected-dark {
+  @extend .drawer-item__title--selected;
+  color: $textDark !important;
+}
+
+.drawer-item-icon {
+  fill: $grayDark;
+  width: 1.5rem;
+  margin-right: 4px;
+}
