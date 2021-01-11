@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import './Snackbar.scss';
 import { useSelector } from 'react-redux';
 import { Context } from '../../context/store';
+import { parseCssDark } from '../../../bloben-common/utils/common';
 
 const AUTO_HIDE: number = 3500;
 const ANIMATION_DELAY: number = 300;
@@ -36,10 +37,10 @@ const Snackbar = (props: any) => {
 
   return (
     <div
-      className={`snackbar__container${snackbarIsVisible ? '-visible' : ''}${isDark ? '-dark' : ''} ${animation}`}
+      className={`${parseCssDark(`snackbar__container${snackbarIsVisible ? '-visible' : ''}`, isDark)} ${animation}`}
       onClick={handleClose}
     >
-      <p className={'snackbar__text'}>{snackbar.text}</p>
+      <p className={parseCssDark('snackbar__text', isDark)}>{snackbar.text}</p>
     </div>
   );
 };

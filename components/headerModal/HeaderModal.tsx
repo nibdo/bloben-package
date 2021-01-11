@@ -36,7 +36,9 @@ const HeaderModalMobile = (props: IHeaderModalMobileProps) => {
   return (
     <div
       className={`header-modal__row${
-        hasHeaderShadow && isMobile ? '-shadow' : ''
+        hasHeaderShadow && isMobile && !isDark ? '-shadow' : ''
+      }${
+          hasHeaderShadow && isMobile && isDark ? '-shadow-dark' : ''
       }
       `}
     >

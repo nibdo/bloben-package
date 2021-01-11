@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { getMonth, getYear, getDate, getHours, getMinutes } from 'date-fns';
 import { ButtonBase } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 
 import './TimePicker.scss';
 import { WidthHook } from 'bloben-common/utils/layout';
+import { parseCssDark } from '../../../bloben-common/utils/common';
+import { Context } from '../../context/store';
 
-const getHoursComponent = (selectedDate: any, selectHour: any) => {
+const getHoursComponent = (selectedDate: any, selectHour: any, isDark: boolean) => {
   const hours: any[] = [];
   for (let i = 0; i < 24; i++) {
     hours.push(i);
@@ -16,9 +18,9 @@ const getHoursComponent = (selectedDate: any, selectHour: any) => {
     <ButtonBase
       onClick={() => selectHour(hour)}
       id={`hour_${hour}`}
-      className={`time-picker__text${
+      className={parseCssDark(`time-picker__text${
         hour === getHours(selectedDate) ? '--selected' : ''
-      }`}
+      }`, isDark)}
     >
       {hour}
     </ButtonBase>
@@ -31,7 +33,7 @@ const EmptyButton = () => (
   </ButtonBase>
 );
 
-const getMinutesComponent = (selectedDate: any, selectMinute: any) => {
+const getMinutesComponent = (selectedDate: any, selectMinute: any, isDark: boolean) => {
   const minutes: any[] = [];
   for (let i = 0; i < 60; i = i + 1) {
     minutes.push(i);
@@ -41,9 +43,9 @@ const getMinutesComponent = (selectedDate: any, selectMinute: any) => {
     <ButtonBase
       id={`minute_${minute}`}
       onClick={() => selectMinute(minute)}
-      className={`time-picker__text${
+      className={parseCssDark(`time-picker__text${
         minute === getMinutes(selectedDate) ? '--selected' : ''
-      }`}
+      }`, isDark)}
     >
       {minute}
     </ButtonBase>
@@ -61,14 +63,16 @@ interface ITimePickerViewProps {
 const TimePickerView = (props: ITimePickerViewProps) => {
   const { selectedDate, selectMinute, selectHour, width } = props;
 
-  const isMobile: boolean = useSelector((state: any) => state.isMobile);
+  const [store] = useContext(Context);
+
+  const {isMobile, isDark} = store;
 
   const scrollOffset: number = isMobile ? 34 : 140;
 
   //TODO Chrome bug for scroll into view, using only scroll to now
 
-  const hours = getHoursComponent(selectedDate, selectHour);
-  const minutes = getMinutesComponent(selectedDate, selectMinute);
+  const hours = getHoursComponent(selectedDate, selectHour, isDark);
+  const minutes = getMinutesComponent(selectedDate, selectMinute, isDark);
 
   useEffect(() => {
     const hourNum: number = getHours(selectedDate);
@@ -120,7 +124,7 @@ const TimePickerView = (props: ITimePickerViewProps) => {
         <EmptyButton />
         <EmptyButton />
       </div>
-      <div className={'time-picker__separator'}>{':'}</div>
+      <div className={parseCssDark('time-picker__separator', isDark)}>{':'}</div>
       <div className={'time-picker__container-minute'}>
         <EmptyButton />
         <EmptyButton />

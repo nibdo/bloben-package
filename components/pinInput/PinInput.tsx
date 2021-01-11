@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './PinInput.scss';
+import { Context } from '../../context/store';
+import { parseCssDark } from '../../../bloben-common/utils/common';
 
 export const PIN_CODE_LENGTH: number = 4;
 export const MAX_PIN_UNLOCK_ATTEMPTS: number = 10;
@@ -10,10 +12,14 @@ interface IInputField {
 const InputField = (props: IInputField) => {
   const { number } = props;
 
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
+
   return (
     <div className={'pin-input__field-wrapper'}>
       <div className={'pin-input__field-container'}>
-        <p className={'pin-input__text'}>{number}</p>
+        <p className={parseCssDark('pin-input__text', isDark)}>{number}</p>
       </div>
     </div>
   );

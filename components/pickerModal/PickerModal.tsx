@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { ButtonBase } from '@material-ui/core';
 import {
   format,
@@ -13,6 +13,7 @@ import BottomSheet from 'bottom-sheet-react';
 import DatePicker from '../datePicker/DatePicker';
 import TimePicker from '../timePicker/TimePicker';
 import { HeightHook, WidthHook } from 'bloben-common/utils/layout';
+import { Context } from '../../context/store';
 
 interface IPickerModalViewProps {
   selectedDate: any;
@@ -34,11 +35,17 @@ const PickerModalView = (props: IPickerModalViewProps) => {
     dateOnly,
   } = props;
 
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
+
   const width: number = WidthHook();
   const height: number = HeightHook();
 
   return (
     <BottomSheet
+        backdropClassName={isDark ? 'bottom-sheet__backdrop--dark' : ''}
+        containerClassName={isDark ? 'bottom-sheet__container--dark' : ''}
       isExpandable={false}
       customHeight={(height / 4) * (dateOnly ? 2 : 3)}
       onClose={handleCloseModal}

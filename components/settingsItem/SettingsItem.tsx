@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { ButtonBase, Switch } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { capitalStart } from '../../utils/common';
 import './SettingsItem.scss';
+import { Context } from '../../context/store';
+import { parseCssDark } from '../../../bloben-common/utils/common';
 
 interface IButtonItemProps {
   title: string;
@@ -17,7 +19,9 @@ interface IButtonItemProps {
 const ButtonItem = (props: IButtonItemProps) => {
   const { title, description, icon, value, toogle, onClick } = props;
 
-  const isDark: boolean = useSelector((state: any) => state.isDark);
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   const valueFormatted: string | null = toogle ? null : capitalStart(value);
 
@@ -25,25 +29,25 @@ const ButtonItem = (props: IButtonItemProps) => {
     <div className={'settings-item__container'}>
       {icon}
       <div className={'settings-item__text-container'}>
-        <p className={`settings-item__title${isDark ? '-dark' : ''}`}>
+        <p className={parseCssDark('settings-item__title', isDark)}>
           {title}
         </p>
         {description ? (
-          <p className={`settings-item__description${isDark ? '-dark' : ''}`}>
+          <p className={parseCssDark('settings-item__description', isDark)}>
             {description}
           </p>
         ) : null}
       </div>
       {value && !toogle ? (
         <div className={'settings-item__value-container'}>
-          <p className={`settings-item__value${isDark ? '-dark' : ''}`}>
+          <p className={parseCssDark('settings-item__value', isDark)}>
             {valueFormatted}
           </p>
         </div>
       ) : null}
       {toogle ? (
         <div className={'settings-item__value-container'}>
-          <div className={`settings-item__value${isDark ? '-dark' : ''}`}>
+          <div className={parseCssDark('settings-item__value', isDark)}>
             <Switch
               checked={!!value}
               onChange={onClick}

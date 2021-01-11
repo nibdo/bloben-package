@@ -66,6 +66,7 @@ const InputContainer = (props: IInputContainerProps) => {
         isPassword={false}
         autoComplete={'off'}
         error={warningUsername}
+        forceIsDarkFalse={true}
       />
       {/*<div style={{ width: 24 }} />*/}
       <InputForm
@@ -77,6 +78,7 @@ const InputContainer = (props: IInputContainerProps) => {
         autoFocus={false}
         isPassword={true}
         autoComplete={'off'}
+        forceIsDarkFalse={true}
       />
       <InputForm
         label={'Confirm password'}
@@ -87,6 +89,7 @@ const InputContainer = (props: IInputContainerProps) => {
         autoFocus={false}
         isPassword={true}
         autoComplete={'off'}
+        forceIsDarkFalse={true}
       />
       <Landing.Separator />
       <Landing.Separator />

@@ -76,6 +76,7 @@ const InputContainer = (props: IInputContainerProps) => {
         isPassword={false}
         autoComplete={'on'}
         error={warningUsername}
+        forceIsDarkFalse={true}
       />
       <InputForm
         label={'Password'}
@@ -87,6 +88,7 @@ const InputContainer = (props: IInputContainerProps) => {
         isPassword={true}
         autoComplete={'off'}
         error={warningPassword}
+        forceIsDarkFalse={true}
       />
       <Landing.Separator />
       <Landing.ButtonPrimary title={'Login'} onClick={verifyAccount} />

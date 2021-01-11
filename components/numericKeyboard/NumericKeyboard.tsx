@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './NumericKeyboard.scss';
 import { ButtonBase } from '@material-ui/core';
 import EvaIcons from '../../../bloben-common/components/eva-icons';
+import { Context } from '../../context/store';
+import { parseCssDark } from '../../../bloben-common/utils/common';
 
 interface IKeyProps {
     index: string;
@@ -12,6 +14,10 @@ interface IKeyProps {
 }
 const Key = (props: IKeyProps) => {
   const { disabled, number, handleClick, handlePop } = props;
+
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   const onClick = () => {
       if (handleClick) {
@@ -25,15 +31,15 @@ const Key = (props: IKeyProps) => {
 
   return (
     <div className={'key__container'}>
-      <ButtonBase className={`key__button${disabled ? '-disabled' : ''}`} disabled={disabled} onClick={onClick}>
+      <ButtonBase className={parseCssDark(`key__button${disabled ? '-disabled' : ''}`, isDark)} disabled={disabled} onClick={onClick}>
           {handlePop ? <EvaIcons.SkipBack className={'icon-svg'}/> : <p className={'key__text'}>{number}</p> }
       </ButtonBase>
     </div>
   );
 };
 
-const renderKeys = (keys: string[], handleClick: any, handlePop?: any) => {
- return keys.map((key: string) => {
+const renderKeys = (keys: string[], handleClick: any, handlePop?: any) =>
+ keys.map((key: string) => {
      if (key === '') {
          return <Key index={key} number={key} disabled={true} />;
      } else if (key === 'back') {
@@ -42,7 +48,6 @@ const renderKeys = (keys: string[], handleClick: any, handlePop?: any) => {
          return <Key index={key} number={key} handleClick={handleClick} />;
      }
   })
-}
 
 interface IKeyboardRowProps {
     keys: string[];

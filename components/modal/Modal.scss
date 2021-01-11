@@ -38,7 +38,7 @@ $MODAL_WIDTH_MOBILE: 100%;
 
 .modal__wrapper-dark {
   @extend .modal__wrapper;
-  background-color: $SURFACE_DARK;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .modal__container {
@@ -73,7 +73,7 @@ $MODAL_WIDTH_MOBILE: 100%;
 }
 .modal__container-dark {
   @extend .modal__container;
-  background-color: $SURFACE_DARK;
+  background-color: $MODAL_DARK_LIGHTER;
 }
 
 .modal__title {

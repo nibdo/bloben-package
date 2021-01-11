@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 
 import DropdownWrapper from '../dropdownWrapper/DropdownWrapper';
 import { HeightHook } from 'bloben-common/utils/layout';
 import BottomSheet from 'bottom-sheet-react';
+import { Context } from '../../context/store';
 
 /**
  * Filter all null items
@@ -39,7 +40,10 @@ const BottomSheetDropdownSwitcher = (props: IBottomSheetDropdownSwitcherProps) =
     setCoordinates,
   } = props;
 
-  const isMobile: boolean = useSelector((state: any) => state.isMobile);
+  const [store] = useContext(Context);
+
+  const {isMobile, isDark} = store;
+
   const height: number = HeightHook();
 
   // Filter null children from wrapper or React Clone in BottomSheet crash
@@ -47,6 +51,8 @@ const BottomSheetDropdownSwitcher = (props: IBottomSheetDropdownSwitcherProps) =
 
   return isMobile ? (
     <BottomSheet
+        backdropClassName={isDark ? 'bottom-sheet__backdrop--dark' : ''}
+        containerClassName={isDark ? 'bottom-sheet__container--dark' : ''}
       isExpandable={false}
       customHeight={(height / 4) * 2}
       onClose={handleClose}

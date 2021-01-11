@@ -11,12 +11,11 @@ import {
 } from '../utils/common';
 import { v4 } from 'uuid';
 import GetPin from '../views/getPin/GetPin';
-import { logger, MOBILE_MAX_WIDTH } from 'bloben-common/utils/common';
+import { logger } from 'bloben-common/utils/common';
 import { LocalForage } from '../utils/LocalForage';
 import OpenPgp, { PgpKeys } from '../utils/OpenPgp';
 import { MAX_PIN_UNLOCK_ATTEMPTS } from '../components/pinInput/PinInput';
 import { logOut } from '../utils/logout';
-import { WidthHook } from '../../bloben-common/utils/layout';
 import { Context } from '../context/store';
 import Snackbar from '../components/snackbar/Snackbar';
 import LoadingScreen from '../../bloben-common/components/loadingScreen/LoadingScreen';
@@ -30,41 +29,9 @@ const EncryptionLayer = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [encryptionType, setEncryptionType] = useState('');
 
-  const width = WidthHook();
-
   const setContext = (type: string, payload: any) => {
     dispatch({ type, payload });
   };
-
-  /**
-   * Set mobile/desktop layout
-   */
-  useEffect(() => {
-    if (width < MOBILE_MAX_WIDTH) {
-      setContext('isMobile', true);
-    } else {
-      setContext('isMobile', false);
-    }
-  }, [width]);
-
-  /**
-   * Set theme
-   */
-  useEffect(() => {
-    const getTheme = async () => {
-      const themeLocalValue: any = await LocalForage.getItem('isDark');
-
-      if (!themeLocalValue) {
-        await LocalForage.setItem('isDark', false);
-        setContext('isDark', false);
-      }
-
-      setContext('isDark', themeLocalValue);
-    }
-
-    getTheme();
-
-  }, [])
 
   const changeStorageEncryptedStatus = async (
     value: boolean

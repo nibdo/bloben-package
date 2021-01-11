@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import './NotificationSettings.scss';
@@ -11,6 +11,7 @@ import { parseCssDark } from 'bloben-common/utils/common';
 import Dropdown from '../dropdown/Dropdown';
 import MyMenu from '../myMenu/MyMenu';
 import BottomSheet from 'bottom-sheet-react';
+import { Context } from '../../context/store';
 
 const NOTIFICATIONS_MAX_LENGTH: number = 4;
 
@@ -72,15 +73,19 @@ export const RepeatValueDropDown = (props: IRepeatValueDropdownProps) => {
     style,
   } = props;
 
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
+
   return (
     <div className={'repeat__value-wrapper'}>
-      <p className={'repeat__value-label'}>{label}</p>
+      <p className={parseCssDark('repeat__value-label', isDark)}>{label}</p>
       <ButtonBase
         className={'repeat__value-container'}
         style={style}
         onClick={handleOpen}
       >
-        <p className={'repeat__value-text'}>{value}</p>
+        <p className={parseCssDark('repeat__value-text', isDark)}>{value}</p>
         <Dropdown
           isOpen={isOpen}
           handleClose={handleClose}
@@ -106,11 +111,13 @@ interface IRepeatValueInputProps {
 export const RepeatValueInput = (props: IRepeatValueInputProps) => {
   const { label, defaultValue, type, name, value, onChange, style } = props;
 
-  const isDark: boolean = useSelector((state: any) => state.isDark);
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   return (
     <div className={'repeat__value-wrapper'}>
-      <p className={'repeat__value-label'}>{label}</p>
+      <p className={parseCssDark('repeat__value-label', isDark)}>{label}</p>
       <input
         type={type}
         style={style}
@@ -126,16 +133,19 @@ export const RepeatValueInput = (props: IRepeatValueInputProps) => {
 
 interface IRadioButtonProps {
   isSelected: boolean;
-  isDark?: boolean;
   label: string;
   handleClick: any;
 }
 const RadioButton = (props: IRadioButtonProps) => {
-  const { isSelected, isDark, label, handleClick } = props;
+  const { isSelected, label, handleClick } = props;
+
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   return (
     <div className={'repeat__value-wrapper'}>
-      <p className={'repeat__value-label'}>{label}</p>
+      <p className={parseCssDark('repeat__value-label', isDark)}>{label}</p>
       <IconButton onClick={handleClick}>
         {isSelected ? (
           <EvaIcons.RadioOn
@@ -166,6 +176,10 @@ const CustomNotificationOptions = (props: ICustomNotificationOptionsProps) => {
   const [value, setValue] = useState('hours');
   const [amount, setAmount] = useState(2);
   const [type, setType] = useState('push');
+
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   const openDropdown = (e: any) => {
     const nativeEvent: any = e.nativeEvent;
@@ -205,7 +219,7 @@ const CustomNotificationOptions = (props: ICustomNotificationOptionsProps) => {
         }}
       >
         <div style={{ width: '50%', justifyContent: 'flex-end' }}>
-          <h4 className={'repeat__subtitle'}>Custom notification</h4>
+          <h4 className={parseCssDark('repeat__subtitle', isDark)}>Custom notification</h4>
         </div>
         <div
           style={{ display: 'flex', width: '50%', justifyContent: 'flex-end' }}
@@ -239,7 +253,7 @@ const CustomNotificationOptions = (props: ICustomNotificationOptionsProps) => {
           isOpen={valueIsOpen.clientX ? true : null}
         />
       </div>
-      <h4 className={'repeat__subtitle'}>Notify via</h4>
+      <h4 className={parseCssDark('repeat__subtitle', isDark)}>Notify via</h4>
       <div className={'repeat__row'}>
         <RadioButton label={'Push'} isSelected={true} handleClick={() => {return}}/>
         <div style={{ width: 25 }} />
@@ -255,11 +269,13 @@ interface IAddNotificationItemProps {
 const AddNotificationItem = (props: IAddNotificationItemProps) => {
   const { onClick } = props;
 
-  const isDark: boolean = useSelector((state: any) => state.isDark);
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   return (
     <div
-      className={parseCssDark('event_detail__row no-row', isDark)}
+      className={`${parseCssDark('event_detail__row', isDark)}  no-row`}
       onClick={onClick}
     >
       <div className={'event_detail__container--icon'}>
@@ -293,7 +309,9 @@ interface IOneNotificationProps {
 const OneNotification = (props: IOneNotificationProps) => {
   const { item, removeNotification } = props;
 
-  const isDark: boolean = useSelector((state: any) => state.isDark);
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   const notificationText: string = parseNotificationText(
     item.amount,
@@ -307,13 +325,13 @@ const OneNotification = (props: IOneNotificationProps) => {
       </div>
       <div className={'event_detail__sub-row'}>
         <div className={'event_detail__button'}>
-          <p className={`event_detail__input${isDark ? '--dark' : ''}`}>
+          <p className={parseCssDark('event_detail__input', isDark)}>
             {`${notificationText}`}
           </p>
         </div>
         <div className={'event_detail__button-right'}>
           <IconButton onClick={() => removeNotification(item)}>
-            <EvaIcons.Cross className={'icon-svg'} />
+            <EvaIcons.Cross className={parseCssDark('icon-svg', isDark)} />
           </IconButton>
         </div>
       </div>
@@ -362,9 +380,10 @@ const NotificationSettings = (props: INotificationSettingsProps) => {
     setCoordinates,
   } = props;
 
-  const isMobile: boolean = useSelector((state: any) => state.isMobile);
-
   const height: number = HeightHook();
+  const [store] = useContext(Context);
+
+  const {isDark, isMobile} = store;
 
   const [menuIsOpen, openMenu] = useState(false);
   const [isCustomOpen, openCustomMenu] = useState(false);
@@ -385,7 +404,7 @@ const NotificationSettings = (props: INotificationSettingsProps) => {
   const handleCloseCustomMenu = (): void => openCustomMenu(false);
 
   return (
-    <div className={'event_detail__wrapper-row'}>
+    <div className={parseCssDark(`event_detail__wrapper-row ${!noNewNotifications ? 'no-row' : ''}`, isDark)}>
       {!noNewNotifications ? (
         <AddNotificationItem
           onClick={() => {
@@ -417,7 +436,7 @@ const NotificationSettings = (props: INotificationSettingsProps) => {
         ) : (
           <ModalSmall isOpen={menuIsOpen} handleClose={handleCloseMenu}>
             <MyMenu
-              variant={"radio"}
+              variant={'radio'}
               select={parseSelectClick}
               selected={selected}
               handleClose={handleCloseMenu}
@@ -430,6 +449,8 @@ const NotificationSettings = (props: INotificationSettingsProps) => {
       {isCustomOpen ? (
         <BottomSheet
           {...props}
+          backdropClassName={isDark ? 'bottom-sheet__backdrop--dark' : ''}
+          containerClassName={isDark ? 'bottom-sheet__container--dark' : ''}
           customHeight={(height / 4) * 2}
           isExpandable={false}
           onClose={handleCloseCustomMenu}

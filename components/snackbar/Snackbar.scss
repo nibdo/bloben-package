@@ -29,7 +29,7 @@
 
 .snackbar__container-dark {
   @extend .snackbar__container;
-  background-color: $ICON_GRAY_DARK;
+  background-color: $GRAY_400;
 }
 .snackbar__container-visible-dark {
 @extend .snackbar__container-dark;
@@ -38,6 +38,10 @@
 .snackbar__text {
   color: $GRAY_200;
   font-size: 1.4rem;
+}
+.snackbar__text-dark {
+  @extend .snackbar__text;
+  color: $GRAY_900;
 }
 
 .snackbar__up {

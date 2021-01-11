@@ -21,7 +21,9 @@ interface IMenuContentCheckProps {
 const MenuContentCheck = (props: IMenuContentCheckProps) => {
   const { selected, select, data, handleClose } = props;
 
-  const isDark: boolean = useSelector((state: any) => state.isDark);
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   return data.map((item: any) => {
     const isChecked: boolean = selected.includes(item);
@@ -68,7 +70,9 @@ interface IMenuContentRadioProps {
 const MenuContentRadio = (props: IMenuContentRadioProps) => {
   const { selected, select, data, handleClose } = props;
 
-  const isDark: boolean = useSelector((state: any) => state.isDark);
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   return data.map((item: any) => {
     const handleClick = () => {
@@ -112,7 +116,9 @@ interface IMenuContentSimpleProps {
 const MenuContentSimple = (props: IMenuContentSimpleProps) => {
   const { data, handleClose } = props;
 
-  const isDark: boolean = useSelector((state: any) => state.isDark);
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   return data.map((item: any) => {
     const handleClick = () => {
@@ -148,7 +154,9 @@ interface IMenuContentCalendarProps {
 const MenuContentCalendar = (props: IMenuContentCalendarProps) => {
   const { select, data, handleClose } = props;
 
-  const isDark: boolean = useSelector((state: any) => state.isDark);
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   const preventDefault = (e: any) => {
     e.preventDefault();

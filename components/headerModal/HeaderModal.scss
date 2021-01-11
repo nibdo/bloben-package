@@ -36,8 +36,8 @@ $HEADER_HEIGHT_MOBILE: 56px;
   border-bottom: 0.5px solid $GRAY_300;
 }
 .header-modal__row-shadow-dark {
-  @extend .header-modal__row-shadow;
-  border-bottom: 0.5px solid $BORDER_GRAY_DARK;
+  @extend .header-modal__row;
+  background-color: $MODAL_DARK_LIGHTER;
 }
 
 .with-shadow {

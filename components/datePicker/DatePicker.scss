@@ -55,7 +55,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
 
 .date-picker__one-day-container--selected {
@@ -63,7 +62,11 @@
   background-color: $PRIMARY_LIGHT !important;
   color: $primaryText !important;
 }
-
+.date-picker__one-day-container--selected-dark {
+  @extend .date-picker__one-day-container;
+  background-color: $PRIMARY_DARK !important;
+  color: $GRAY_800 !important;
+}
 .date-picker__container-month {
   height: auto;
   display: flex;
@@ -82,7 +85,10 @@
   margin: 8px 8px 8px 8px;
   font-size: 2.2rem;
 }
-
+.date-picker__title-month-dark {
+  @extend .date-picker__title-month;
+  color: $GRAY_200;
+}
 .date-picker__one-day-text {
   color: $GRAY_400;
 }
@@ -95,6 +101,12 @@
 .date-picker__one-day-text-selected {
   @extend .date-picker__one-day-text;
   color: $reverseText;
+}
+.date-picker__one-day-text-dark {
+  color: $GRAY_600;
+}
+.date-picker__one-day-text-normal-dark {
+  color: $textDark;
 }
 .date-picker__one-day-text-normal-selected {
   @extend .date-picker__one-day-text;

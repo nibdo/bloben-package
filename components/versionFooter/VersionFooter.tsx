@@ -1,15 +1,19 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useContext } from 'react';
 
 import './VersionFooter.scss';
+import { Context } from '../../context/store';
+import { parseCssDark } from '../../../bloben-common/utils/common';
 
 const VersionFooter = () => {
-  const isDark: boolean = useSelector((state: any) => state.isDark);
+    const [store] = useContext(Context);
+
+    const {isDark} = store;
+
 
   return (
     <div className={'version-footer__container'}>
       <p
-        className={`version-footer__text${isDark ? '-dark' : ''}`}
+        className={parseCssDark('version-footer__text', isDark)}
       >{`Version ${process.env.REACT_APP_VERSION}`}</p>
     </div>
   );

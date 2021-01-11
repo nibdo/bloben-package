@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router';
 import './Modal.scss';
 import { useSelector } from 'react-redux';
+import { Context } from '../../context/store';
 
 interface IModalViewProps {
   goBack?: any;
@@ -11,8 +12,9 @@ interface IModalViewProps {
 const ModalView = (props: IModalViewProps) => {
   const { goBack, children, preventDefault } = props;
 
-  const isDark: boolean = useSelector((state: any) => state.isDark);
-  const isMobile: boolean = useSelector((state: any) => state.isMobile);
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   return (
     <div className={`modal__wrapper${isDark ? '-dark' : ''}`} onClick={goBack}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './Dropdown.scss';
 import EvaIcons from 'bloben-common/components/eva-icons';
 import {  ButtonBase } from '@material-ui/core';
@@ -8,6 +8,8 @@ import { isArray } from 'util';
 import { HeightHook } from 'bloben-common/utils/layout';
 import { useDispatch, useSelector } from 'react-redux';
 import { logOut } from '../../utils/logout';
+import { parseCssDark } from '../../../bloben-common/utils/common';
+import { Context } from '../../context/store';
 
 interface IDropdownCheckboxItemProps {
   selectedValue: any;
@@ -18,7 +20,9 @@ const DropdownCheckboxItem = (props: IDropdownCheckboxItemProps) => {
   const { selectedValue, value, handleClick } = props;
 
   const isSelected: boolean = selectedValue === value;
-  const isDark: boolean = useSelector((state: any) => state.isDark);
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   return (
     <ButtonBase
@@ -50,7 +54,9 @@ const DropdownItem = (props: IDropdownItemProps) => {
   const isSelected: boolean = isArray(selectedValue)
     ? value.indexOf(selectedValue) !== -1
     : selectedValue === value;
-  const isDark: boolean = useSelector((state: any) => state.isDark);
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   return (
     <ButtonBase
@@ -80,14 +86,16 @@ interface IDropdownItemSimpleProps {
 const DropdownItemSimple = (props: IDropdownItemSimpleProps) => {
   const { value, handleClick } = props;
 
-  const isDark: boolean = useSelector((state: any) => state.isDark);
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   return (
     <ButtonBase
       className={`dropdown__item-container`}
       onClick={() => handleClick(value)}
     >
-      <p className={`dropdown__item-text${isDark ? '-dark' : ''}`}>
+      <p className={parseCssDark('dropdown__item-text', isDark)}>
         {capitalStart(value)}
       </p>
     </ButtonBase>
@@ -187,10 +195,12 @@ const DropdownView = (props: IDropdownViewProps) => {
   const { clientX, clientY } = isOpen;
 
   const height: number = HeightHook();
-  const isDark: boolean = useSelector((state: any) => state.isDark);
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   const dropdownStyle = {
-    bottom: clientY ? height - clientY < 100 ? `-10px` : '-40px' : '',
+    top: clientY ? height - clientY < 150 ? `0px` : '100px' : '',
     left: clientX ? `${clientX}px` : '',
   };
 
@@ -206,7 +216,7 @@ const DropdownView = (props: IDropdownViewProps) => {
     <div className={'dropdown__anchor'}>
       <div className={'dropdown__wrapper'} onClick={closeDropdown} />
       <div
-        className={`dropdown__container${isDark ? '-dark' : ''}`}
+        className={parseCssDark('dropdown__container', isDark)}
         id={'dropdown'}
         onClick={preventDefault}
         style={dropdownStyle}

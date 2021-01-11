@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import MobileTitle from '../../components/title/Title';
 import SettingsItem from '../../components/settingsItem/SettingsItem';
 import EvaIcons from '../../../bloben-common/components/eva-icons';
@@ -6,13 +6,21 @@ import Dropdown from '../../components/dropdown/Dropdown';
 import HeaderModal from '../../components/headerModal/HeaderModal';
 import { Context } from '../../context/store';
 import { LocalForage } from '../../utils/LocalForage';
+import {
+  DARK_THEME,
+  IThemeValue,
+  LIGHT_THEME,
+  SYSTEM_THEME,
+  triggerTheme,
+} from '../../utils/changeTheme';
+import { capitalStart } from '../../utils/common';
 
-const dropdownValues: string[] = ['light', 'dark', 'system'];
+const dropdownValues: IThemeValue[] = [LIGHT_THEME, DARK_THEME, SYSTEM_THEME];
 
 interface IAppearanceViewProps {
   openThemeDropdown: any;
   setThemeDropdown: any;
-  theme: string;
+  currentTheme: IThemeValue;
   themeDropdown: any;
   handleThemeChange: any;
 }
@@ -20,7 +28,7 @@ const AppearanceView = (props: IAppearanceViewProps) => {
   const {
     openThemeDropdown,
     setThemeDropdown,
-    theme,
+    currentTheme,
     themeDropdown,
     handleThemeChange,
   } = props;
@@ -41,12 +49,12 @@ const AppearanceView = (props: IAppearanceViewProps) => {
           }
           title={'Theme'}
           onClick={openThemeDropdown}
-          description={theme}
+          description={capitalStart(currentTheme)}
         />
         <Dropdown
           isOpen={themeDropdown}
           handleClose={() => setThemeDropdown('')}
-          selectedValue={theme}
+          selectedValue={currentTheme}
           values={dropdownValues}
           onClick={handleThemeChange}
         />
@@ -57,6 +65,7 @@ const AppearanceView = (props: IAppearanceViewProps) => {
 
 const Appearance = () => {
   const [themeDropdown, setThemeDropdown]: any = useState('');
+  const [currentTheme, setCurrentTheme]: any = useState(null);
 
   const openThemeDropdown = (e: any) => {
     const nativeEvent: any = e.nativeEvent;
@@ -64,23 +73,46 @@ const Appearance = () => {
     setThemeDropdown({ clientX, clientY });
   };
 
-  const [store, setContext] = useContext(Context);
-  const {isDark} = store;
+  const [store, dispatchContext] = useContext(Context);
 
-  const handleThemeChange = async (value: string) => {
-    setContext('isDark', value);
-    await LocalForage.setItem('isDark', value);
+  const setContext = (type: string, payload: any) => {
+    dispatchContext({ type, payload });
   };
 
-  return (
+  const handleThemeChange = async (value: IThemeValue) => {
+    await triggerTheme(value, setContext);
+    dispatchContext('isDark', false);
+    setCurrentTheme(value);
+    setThemeDropdown(null)
+  };
+
+  /**
+   * Load theme on init
+   */
+  useEffect(() => {
+    const getTheme = async () => {
+      // Try to load theme from database
+      const themeLocalValue: IThemeValue | null = await LocalForage.getItem(
+        'theme'
+      );
+
+      if (themeLocalValue) {
+        setCurrentTheme(themeLocalValue);
+      }
+    };
+
+    getTheme();
+  },        []);
+
+  return currentTheme ? (
     <AppearanceView
       openThemeDropdown={openThemeDropdown}
       themeDropdown={themeDropdown}
       setThemeDropdown={setThemeDropdown}
       handleThemeChange={handleThemeChange}
-      theme={isDark}
+      currentTheme={currentTheme}
     />
-  );
+  ) : null;
 };
 
 export default Appearance;

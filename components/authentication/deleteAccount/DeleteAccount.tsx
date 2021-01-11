@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useContext, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import { AxiosResponse } from 'axios';
@@ -17,11 +17,12 @@ import {
  setIsAppStarting,
 } from '../../../../redux/actions';
 import { HTTP_STATUS_BAD_REQUEST } from 'bloben-package/utils/common';
-import { logger } from 'bloben-common/utils/common';
+import { logger, parseCssDark } from 'bloben-common/utils/common';
 import { logOut } from '../../../utils/logout';
 import MobileTitle from '../../title/Title';
 import StateReducer from '../../../utils/state-reducer';
 import HeaderModal from '../../headerModal/HeaderModal';
+import { Context } from '../../../context/store';
 const {  WRONG_PASSWORD } = errors;
 
 const rfc5054: any = {
@@ -47,7 +48,9 @@ const InputContainer = (props: IInputContainerProps) => {
     onChange,
   } = props;
 
-  const isDark: boolean = useSelector((state: any) => state.isDark);
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   return (
       <div className={'settings__container-input'}>
@@ -64,7 +67,7 @@ const InputContainer = (props: IInputContainerProps) => {
         />
         <Landing.Separator/>
         <Landing.Separator/>
-        <Landing.ButtonPrimary title={'Delete'} onClick={verifyAccount} />
+        <Landing.ButtonPrimary title={'Delete'} onClick={verifyAccount} isDark={true}/>
       </div>
   );
 };
@@ -84,8 +87,12 @@ const DeleteAccountView = (props: IDeleteAccountView) => {
     onChange,
   } = props;
 
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
+
   return (
-      <div className={'column'}>
+      <div className={parseCssDark('column', isDark)}>
         <HeaderModal />
         <div className={'settings__container'}>
           <MobileTitle title={'Delete account'} />
@@ -114,7 +121,7 @@ const DeleteAccount = () => {
   const setLocalState = (stateName: string, data: any): void => {
     const payload: any = { stateName, type: 'simple', data };
     // @ts-ignore
-    dispatchState({ state, payload });
+    dispatchState({ deleteAccountState, payload });
   };
 
   const onChange = (e: any): void => {

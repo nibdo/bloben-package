@@ -27,7 +27,6 @@ $MODAL_WIDTH_MOBILE: 100%;
 
 .modal-small__wrapper-dark {
   @extend .modal-small__wrapper;
-  background-color: $SURFACE_DARK;
 }
 
 .modal-small__container {
@@ -58,7 +57,7 @@ $MODAL_WIDTH_MOBILE: 100%;
 }
 .modal-small__container-dark {
   @extend .modal-small__container;
-  background-color: $SURFACE_DARK;
+  background-color: $MODAL_DARK_LIGHTER;
 }
 
 .modal-small__title {

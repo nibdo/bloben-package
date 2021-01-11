@@ -62,12 +62,19 @@
     font-size: 2rem;
   }
 }
+.time-picker__text-dark {
+  @extend .time-picker__text;
+  color: $GRAY_400 !important;
+}
 .time-picker__text--selected {
   @extend .time-picker__text;
   font-weight: bold;
   color: $PRIMARY_LIGHT !important;
 }
-
+.time-picker__text--selected-dark {
+  @extend .time-picker__text--selected;
+  color: $PRIMARY_DARK !important;
+}
 .time-picker__text--hidden {
   @extend .time-picker__text;
   color: transparent !important;
@@ -85,4 +92,8 @@
   color: $gray;
   z-index: 9999;
   font-size: 3.5rem;
+}
+.time-picker__separator-dark {
+  @extend .time-picker__separator;
+  color: $GRAY_500;
 }

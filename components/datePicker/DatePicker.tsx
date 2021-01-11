@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   addDays,
@@ -18,6 +18,8 @@ import './DatePicker.scss';
 import { WidthHook } from 'bloben-common/utils/layout';
 import { ButtonBase, IconButton } from '@material-ui/core';
 import EvaIcons from 'bloben-common/components/eva-icons';
+import { Context } from '../../context/store';
+import { parseCssDark } from '../../../bloben-common/utils/common';
 
 const parseMonths = (monthNum: number): string => {
   switch (monthNum) {
@@ -98,18 +100,22 @@ const OneDay = (props: IOneDayProps) => {
   const isSameMonthValue: boolean = isSameMonth(item, monthDayRef);
   const isSelectedDate: boolean = isSameDay(item, new Date(selectedDate));
 
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
+
   return (
     <ButtonBase
       onClick={() => selectDate(item)}
-      className={`date-picker__one-day-container${
+      className={parseCssDark(`date-picker__one-day-container${
         isSelectedDate ? '--selected' : null
-      }`}
+      }`,                     isDark)}
       style={oneDayStyle}
     >
       <p
-        className={`date-picker__one-day-text${
+        className={parseCssDark(`date-picker__one-day-text${
           isSameMonthValue ? '-normal' : ''
-        }${isSelectedDate ? '-selected' : ''}`}
+        }${isSelectedDate ? '-selected' : ''}`, isDark)}
       >
         {getDate(item)}
       </p>
@@ -138,7 +144,10 @@ const Month = (props: IMonthProps) => {
   } = props;
 
   const monthDayRef: any = data[14];
-  const isDark: boolean = useSelector((state: any) => state.isDark);
+
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   const days = renderDays(
     data,
@@ -160,15 +169,15 @@ const Month = (props: IMonthProps) => {
   return (
     <div className={'date-picker__container-month'} style={containerStyle}>
       <div className={'date-picker__row'}>
-        <h6 className={'date-picker__title-month'}>{monthTitle}</h6>
+        <h6 className={parseCssDark('date-picker__title-month', isDark)}>{monthTitle}</h6>
         <IconButton onClick={subOneMonth}>
           <EvaIcons.ChevronLeft
-            className={`icon-svg${isDark ? '-dark' : ''}`}
+              className={parseCssDark('icon-svg', isDark)}
           />
         </IconButton>
         <IconButton onClick={addOneMonth}>
           <EvaIcons.ChevronRight
-            className={`icon-svg${isDark ? '-dark' : ''}`}
+            className={parseCssDark('icon-svg', isDark)}
           />
         </IconButton>
       </div>
@@ -295,7 +304,7 @@ const DatePicker = (props: IDatePickerProps) => {
       const dateNow: any = JSON.parse(JSON.stringify(selectedDate));
       getDaysInMonthInit(dateNow);
     }
-  }, []);
+  },        []);
 
   const handleScroll = (e: any) => {
     if (e.target.scrollTop > 0) {

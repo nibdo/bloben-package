@@ -1,12 +1,16 @@
 import React from 'react';
-import EncryptionLayer from './EncryptionLayer';
 import { LocalForage } from 'bloben-package/utils/LocalForage';
+import ContextLayer from './ContextLayer';
 
+/**
+ * Init indexed database
+ * @constructor
+ */
 const StorageLayer = () => {
     LocalForage.config();
 
     return (
-        <EncryptionLayer/>
+        <ContextLayer/>
     )
 }
 

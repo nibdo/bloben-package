@@ -9,6 +9,7 @@ import InputForm from '../../../bloben-common/components/inputForm/InputForm';
 import Landing from 'bloben-common/components/landing/Landing';
 import NumericKeyboard from '../../components/numericKeyboard/NumericKeyboard';
 import HeaderModal from '../../components/headerModal/HeaderModal';
+import { parseCssDark } from '../../../bloben-common/utils/common';
 
 interface IPinInputDesktopProps {
   handleClick: any;
@@ -90,8 +91,12 @@ const GetPinView = (props: IGetPinViewProps) => {
     handlePop,
   } = props;
 
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
+
   return (
-    <div className={'column'}>
+    <div className={parseCssDark('column', isDark)}>
       <HeaderModal absolute={true}/>
       <div className={'settings__container'}>
         <MobileTitle title={'PIN Lock'} />

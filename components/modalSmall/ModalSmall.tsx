@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './ModalSmall.scss';
 import { useSelector } from 'react-redux';
+import { Context } from '../../context/store';
+import { parseCssDark } from '../../../bloben-common/utils/common';
 
 interface IModalViewProps {
   handleClose: any;
@@ -9,7 +11,10 @@ interface IModalViewProps {
 }
 const ModalView = (props: IModalViewProps) => {
   const { handleClose, children, preventDefault } = props;
-  const isDark: boolean = useSelector((state: any) => state.isDark);
+
+  const [store] = useContext(Context);
+
+  const {isDark} = store;
 
   const onClose = (e: any): void => {
     preventDefault(e)
@@ -18,12 +23,12 @@ const ModalView = (props: IModalViewProps) => {
 
   return (
     <div
-      className={`modal-small__wrapper${isDark ? '-dark' : ''}`}
+      className={parseCssDark('modal-small__wrapper', isDark)}
       onClick={onClose}
     >
       <div
         onClick={preventDefault}
-        className={`modal-small__container${isDark ? '-dark' : ''} `}
+        className={parseCssDark('modal-small__container', isDark)}
       >
         {children}
       </div>

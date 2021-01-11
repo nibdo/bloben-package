@@ -28,11 +28,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: auto;
   height: 6rem;
   width: 6rem;
   border-radius: 3rem !important;
   background: rgba(128, 128, 128, 0.35) !important;
+}
+
+.key__button-dark {
+  @extend .key__button;
+  background-color: $GRAY_400 !important;
 }
 
 .key__button-disabled {

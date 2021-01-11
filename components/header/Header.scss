@@ -28,10 +28,10 @@ $HEADER_HEIGHT_MOBILE: 56px;
 .header__wrapper-dark {
   @extend .header__wrapper;
   background-color: $MODAL_DARK;
-  @media (min-width: 750px) {
-    border-radius: 32px 0 0 0;
-    border-bottom: solid 0.6px $MODAL_DARK;
-  }
+  //@media (min-width: 750px) {
+  //  border-radius: 32px 0 0 0;
+  //  border-bottom: solid 0.6px $MODAL_DARK;
+  //}
 }
 .with-dark-shadow {
   background-color: $MODAL_DARK;
