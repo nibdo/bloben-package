@@ -1,0 +1,58 @@
+@import "bloben-common/globals/theme.scss";
+
+.one-notification__container {
+  display: flex !important;
+  flex-direction: row !important;
+  width: 100% !important;
+  min-height: 60px !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  border-radius: 8px !important;
+  margin-bottom: 12px !important;
+  padding: 6px 0 6px 0 !important;
+}
+
+.one-notification__container-icon {
+  display: flex;
+  flex-direction: column;
+  width: 50px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+}
+
+.one-notification__container-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.one-notification__title {
+  font-size: 1.2rem !important;
+  font-weight: 600;
+  color: $GRAY_900;
+  padding: 4px 0 4px 0 !important;
+}
+.one-notification__title-dark {
+  @extend .one-notification__title;
+  color: $GRAY_200;
+}
+.one-notification__body {
+  font-size: 1.1rem !important;
+  color: $GRAY_700;
+}
+.one-notification__body-dark {
+  @extend .one-notification__body;
+  color: $GRAY_400;
+}
+
+.one-notification__icon {
+  width: 20px;
+  height: 20px;
+  fill: $GRAY_700 !important;
+}
+.one-notification__icon-dark {
+  @extend .one-notification__icon;
+  fill: $GRAY_300 !important;
+}
