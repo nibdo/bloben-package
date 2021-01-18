@@ -8,9 +8,10 @@ import { Input } from '../input/Input';
 interface ISearchInputProps {
   typedText: string;
   onChange: any;
+  placeholder?: string;
 }
 const SearchInput = (props: ISearchInputProps) => {
-  const { typedText, onChange } = props;
+  const { typedText, onChange, placeholder } = props;
 
   const [store] = useContext(Context);
   const { isDark, isMobile } = store;
@@ -19,7 +20,7 @@ const SearchInput = (props: ISearchInputProps) => {
     <div className={'search__input-wrapper'}>
       <Input
         className={`search__input${isDark ? '-dark' : ''}`}
-        placeholder={'Search'}
+        placeholder={placeholder ? placeholder : 'Search'}
         autoFocus={isMobile}
         name={'name'}
         autoComplete={'off'}
@@ -36,9 +37,10 @@ interface ISearchHeaderProps {
   onSearchInput: any;
   handleClearSearch: any;
   goBack: any;
+  placeholder?: string;
 }
 const SearchHeader = (props: ISearchHeaderProps) => {
-  const { typedText, onSearchInput, handleClearSearch, goBack } = props;
+  const { typedText, onSearchInput, handleClearSearch, goBack, placeholder } = props;
 
   const [store] = useContext(Context);
   const { isDark, isMobile } = store;
@@ -55,7 +57,11 @@ const SearchHeader = (props: ISearchHeaderProps) => {
           }`}
         />
       </IconButton>
-      <SearchInput typedText={typedText} onChange={onSearchInput} />
+      <SearchInput
+        typedText={typedText}
+        onChange={onSearchInput}
+        placeholder={placeholder}
+      />
       {typedText ? (
         <IconButton
           onClick={handleClearSearch}

@@ -1,7 +1,10 @@
 import { v4 } from 'uuid';
 import Crypto from './encryption';
-import CalendarStateEntity, { CalendarBodyToSend } from '../../data/entities/state/calendar.entity';
+import CalendarStateEntity, {
+  CalendarBodyToSend,
+} from '../../data/entities/state/calendar.entity';
 import OpenPgp, { PgpKeys } from './OpenPgp';
+import { getLocalTimezone } from './common';
 
 const DEFAULT_CALENDAR_NAME = 'My calendar';
 const DEFAULT_CALENDAR_COLOR = {
@@ -9,13 +12,13 @@ const DEFAULT_CALENDAR_COLOR = {
   light: '#9fa8da',
   dark: '#3949ab',
 };
-const DEFAULT_LIST_NAME = 'My tasks';
 
 const DEFAULT_CALENDAR_DATA: any = {
-name: DEFAULT_CALENDAR_NAME,
-color: 'indigo',
-reminders: []
-}
+  name: DEFAULT_CALENDAR_NAME,
+  color: 'indigo',
+  reminders: [],
+  timezone: 'device', // Default settings for privacy reasons
+};
 
 export default async (
   username: string,
@@ -27,18 +30,22 @@ export default async (
   // Process registration
 
   // Create new default objects
-  const defaultCalendar: CalendarStateEntity = new CalendarStateEntity(DEFAULT_CALENDAR_DATA)
+  const defaultCalendar: CalendarStateEntity = new CalendarStateEntity(
+    DEFAULT_CALENDAR_DATA
+  );
 
   // Generate new PGP keys
   const pgpKeys: PgpKeys = await OpenPgp.generateKeys(username, password);
-  const {publicKey, privateKey} = pgpKeys;
+  const { publicKey, privateKey } = pgpKeys;
 
-  const encryptedCalendar: CalendarBodyToSend = await defaultCalendar.formatBodyToSendPgp(publicKey);
+  const encryptedCalendar: CalendarBodyToSend = await defaultCalendar.formatBodyToSendPgp(
+    publicKey
+  );
 
   // Encrypted privateKey
   const encryptedPrivateKeyPassword: string = await Crypto.encrypt(
-      privateKey,
-      password
+    privateKey,
+    password
   );
 
   // Create objects for server
@@ -51,11 +58,11 @@ export default async (
     calendar: encryptedCalendar,
     publicKey,
     privateKey: encryptedPrivateKeyPassword,
-    isDemo
+    isDemo,
   };
 
   return {
     data,
-    pgpKeys
+    pgpKeys,
   };
 };

@@ -126,3 +126,7 @@ export const generateRandomDemoString = () => {
 
     return result;
 };
+
+
+export const getLocalTimezone = (): string =>
+    Intl.DateTimeFormat().resolvedOptions().timeZone
