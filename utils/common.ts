@@ -1,4 +1,5 @@
 import { formatISO, parseISO } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz'
 
 export const TIMEOUT_LONG: number = 200;
 export const NO_TIMEOUT: number = 0;
@@ -35,7 +36,7 @@ export const parseToDate = (item: string | Date): Date =>
     typeof item === 'string' ? parseISO(item) : item;
 
 export const parseDateToString = (item: string | Date): string =>
-    typeof item === 'string' ? item : formatISO(item);
+    typeof item === 'string' ? item : item.toISOString();
 
 
 export const colorPalette: any = {
@@ -130,3 +131,37 @@ export const generateRandomDemoString = () => {
 
 export const getLocalTimezone = (): string =>
     Intl.DateTimeFormat().resolvedOptions().timeZone
+
+const getTimezoneOffset = (date: Date): string => {
+    const dateString: string = date.toString();
+
+    return dateString.slice(dateString.indexOf('GMT'), dateString.indexOf('GMT') + 8)
+}
+
+export const parseTimezoneText = (zone: string): string => {
+    if (zone === 'device') {
+        const timezoneDevice: string = getLocalTimezone();
+
+        return `Device (${timezoneDevice})`;
+    }
+
+    if (zone === 'floating') {
+        return 'Floating (fixed) time';
+    }
+
+    return zone;
+}
+
+export const parseTimezoneTextWithOffset = (zone: string, currentDate?: Date): string => {
+    const date: Date = currentDate ? currentDate : new Date();
+
+    if (zone === 'device') {
+        const timezoneOffsetString: string = getTimezoneOffset(date);
+
+        const timezoneDevice: string = getLocalTimezone();
+
+        return `Device (${timezoneDevice}) ${timezoneOffsetString}`;
+    }
+
+    return `${zone}`;
+}

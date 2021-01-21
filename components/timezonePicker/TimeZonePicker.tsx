@@ -7,6 +7,7 @@ import { parseCssDark } from '../../../bloben-common/utils/common';
 import { Context } from '../../context/store';
 import ScrollView from '../../../bloben-common/components/scrollView/ScrollView';
 import SearchHeader from '../searchHeader/SearchHeader';
+import { parseTimezoneTextWithOffset } from '../../utils/common';
 
 interface IOneTimezoneProps {
   name: string;
@@ -26,7 +27,7 @@ const OneTimezone = (props: IOneTimezoneProps) => {
       className={parseCssDark('timezone__container', isDark)}
       onClick={handleSelect}
     >
-    <p className={parseCssDark('timezone__text', isDark)}>{name === 'device' ? 'Device timezone' : name}</p>
+    <p className={parseCssDark('timezone__text', isDark)}>{parseTimezoneTextWithOffset(name)}</p>
   </ButtonBase>;
 };
 
@@ -79,7 +80,7 @@ interface ITimeZonePickerProps {
 }
 const TimeZonePicker = (props: ITimeZonePickerProps) => {
   const [typedText, setTypedText] = useState('');
-  const [results, setResults]: any = useState(['device']);
+  const [results, setResults]: any = useState(['device', 'floating']);
 
   const { selectTimezone, onClose } = props;
 
@@ -91,12 +92,12 @@ const TimeZonePicker = (props: ITimeZonePickerProps) => {
 
   const handleClearSearch = () => {
     setTypedText('');
-    setResults(['device']);
+    setResults(['device', 'floating']);
   };
 
   useEffect(() => {
     if (typedText.length < 1) {
-      setResults(['device']);
+      setResults(['device', 'floating']);
 
       return;
     }
@@ -106,7 +107,7 @@ const TimeZonePicker = (props: ITimeZonePickerProps) => {
   }, [typedText]);
 
   const search = (keyWord: string) => {
-    const result: any = ['device'];
+    const result: any = ['device', 'floating'];
 
     if (keyWord.length >= 3) {
       for (const item of timezones) {

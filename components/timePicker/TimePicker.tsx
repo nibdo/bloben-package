@@ -7,6 +7,7 @@ import './TimePicker.scss';
 import { WidthHook } from 'bloben-common/utils/layout';
 import { parseCssDark } from '../../../bloben-common/utils/common';
 import { Context } from '../../context/store';
+import { DateTime } from 'luxon';
 
 const getHoursComponent = (selectedDate: any, selectHour: any, isDark: boolean) => {
   const hours: any[] = [];
@@ -19,7 +20,7 @@ const getHoursComponent = (selectedDate: any, selectHour: any, isDark: boolean) 
       onClick={() => selectHour(hour)}
       id={`hour_${hour}`}
       className={parseCssDark(`time-picker__text${
-        hour === getHours(selectedDate) ? '--selected' : ''
+        hour === selectedDate.hours ? '--selected' : ''
       }`, isDark)}
     >
       {hour}
@@ -44,7 +45,7 @@ const getMinutesComponent = (selectedDate: any, selectMinute: any, isDark: boole
       id={`minute_${minute}`}
       onClick={() => selectMinute(minute)}
       className={parseCssDark(`time-picker__text${
-        minute === getMinutes(selectedDate) ? '--selected' : ''
+        minute === selectedDate.minutes ? '--selected' : ''
       }`, isDark)}
     >
       {minute}
@@ -75,7 +76,7 @@ const TimePickerView = (props: ITimePickerViewProps) => {
   const minutes = getMinutesComponent(selectedDate, selectMinute, isDark);
 
   useEffect(() => {
-    const hourNum: number = getHours(selectedDate);
+    const hourNum: number = selectedDate.hours;
     const hourEl: any = document.getElementById(`hour_${hourNum}`);
     const hourElement: any = document.querySelector(
       '.time-picker__container-hour'
@@ -87,7 +88,7 @@ const TimePickerView = (props: ITimePickerViewProps) => {
     });
   }, []);
   useEffect(() => {
-    const minuteNum: number = getMinutes(selectedDate);
+    const minuteNum: number = selectedDate.minutes;
     const minuteEl: any = document.getElementById(`minute_${minuteNum}`);
     const minuteElement: any = document.querySelector(
       '.time-picker__container-minute'
@@ -162,26 +163,15 @@ const TimePicker = (props: ITimePickerProps) => {
   const isMobile: boolean = useSelector((state: any) => state.isMobile);
 
   const selectHour = (hour: any) => {
-    const dateValue: any = selectedDate ? selectedDate : new Date();
-    const newDate: any = new Date(
-      getYear(dateValue),
-      getMonth(dateValue),
-      getDate(dateValue),
-      hour,
-      getMinutes(dateValue)
-    );
+    const dateValue: any = selectedDate ? selectedDate : DateTime.local();
+    const newDate: any = dateValue.set({ hour });
     selectTime(newDate);
   };
   const selectMinute = (minute: any) => {
-    const dateValue: any = selectedDate ? selectedDate : new Date();
+    const dateValue: any = selectedDate ? selectedDate : DateTime.local();
 
-    const newDate: any = new Date(
-      getYear(dateValue),
-      getMonth(dateValue),
-      getDate(dateValue),
-      getHours(dateValue),
-      minute
-    );
+    const newDate: any = dateValue.set({ minute });
+
     selectTime(newDate);
   };
 

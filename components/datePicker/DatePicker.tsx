@@ -20,32 +20,33 @@ import { ButtonBase, IconButton } from '@material-ui/core';
 import EvaIcons from 'bloben-common/components/eva-icons';
 import { Context } from '../../context/store';
 import { parseCssDark } from '../../../bloben-common/utils/common';
+import { DateTime } from 'luxon';
 
 const parseMonths = (monthNum: number): string => {
   switch (monthNum) {
-    case 0:
-      return 'January';
     case 1:
-      return 'February';
+      return 'January';
     case 2:
-      return 'March';
+      return 'February';
     case 3:
-      return 'April';
+      return 'March';
     case 4:
-      return 'May';
+      return 'April';
     case 5:
-      return 'June';
+      return 'May';
     case 6:
-      return 'July';
+      return 'June';
     case 7:
-      return 'August';
+      return 'July';
     case 8:
-      return 'September';
+      return 'August';
     case 9:
-      return 'October';
+      return 'September';
     case 10:
-      return 'November';
+      return 'October';
     case 11:
+      return 'November';
+    case 12:
       return 'December';
     default:
       return '';
@@ -58,10 +59,12 @@ const renderDays = (
   sideMargin: number = 0,
   selectDate: any,
   selectedDate: any,
-  monthDayRef: any
+  monthDayRef: any,
+  keyPrefix?: string
 ) =>
   data.map((item: any) => (
     <OneDay
+        key={`${keyPrefix}${item.month}${item.day}${item.millisecond}`}
       item={item}
       width={width}
       sideMargin={sideMargin}
@@ -76,7 +79,7 @@ interface IOneDayProps {
   width: number;
   sideMargin: number;
   selectDate: any;
-  selectedDate: Date;
+  selectedDate: DateTime;
   monthDayRef: any;
 }
 const OneDay = (props: IOneDayProps) => {
@@ -97,8 +100,8 @@ const OneDay = (props: IOneDayProps) => {
     borderRadius: `${oneSide / 2}px`,
   };
 
-  const isSameMonthValue: boolean = isSameMonth(item, monthDayRef);
-  const isSelectedDate: boolean = isSameDay(item, new Date(selectedDate));
+  const isSameMonthValue: boolean = item.hasSame(monthDayRef, 'month')
+  const isSelectedDate: boolean = item.hasSame(selectDate, 'month');
 
   const [store] = useContext(Context);
 
@@ -117,18 +120,19 @@ const OneDay = (props: IOneDayProps) => {
           isSameMonthValue ? '-normal' : ''
         }${isSelectedDate ? '-selected' : ''}`, isDark)}
       >
-        {getDate(item)}
+        {item.day}
       </p>
     </ButtonBase>
   );
 };
 
 interface IMonthProps {
-  data: any;
+  keyPrefix?: string;
+  data: DateTime[];
   width: number;
   sideMargin: number;
   selectDate: any;
-  selectedDate: Date;
+  selectedDate: DateTime;
   addOneMonth: any;
   subOneMonth: any;
 }
@@ -141,6 +145,7 @@ const Month = (props: IMonthProps) => {
     selectedDate,
     addOneMonth,
     subOneMonth,
+    keyPrefix
   } = props;
 
   const monthDayRef: any = data[14];
@@ -155,10 +160,11 @@ const Month = (props: IMonthProps) => {
     sideMargin,
     selectDate,
     selectedDate,
-    monthDayRef
+    monthDayRef,
+    keyPrefix
   );
 
-  const monthTitle: string = parseMonths(getMonth(monthDayRef));
+  const monthTitle: string = parseMonths(monthDayRef ? monthDayRef.month : 1);
 
   const containerStyle: any = {
     width: width - sideMargin * 2,
@@ -187,11 +193,12 @@ const Month = (props: IMonthProps) => {
 };
 
 interface IDatePickerViewProps {
+  keyPrefix?: string;
   data: any;
   width: number;
   sideMargin: number;
   selectDate: any;
-  selectedDate: Date;
+  selectedDate: DateTime;
   addOneMonth: any;
   subOneMonth: any;
   handleScroll: any;
@@ -206,6 +213,7 @@ const DatePickerView = (props: IDatePickerViewProps) => {
     selectedDate,
     addOneMonth,
     subOneMonth,
+    keyPrefix
   } = props;
 
   return (
@@ -222,22 +230,19 @@ const DatePickerView = (props: IDatePickerViewProps) => {
         selectedDate={selectedDate}
         addOneMonth={addOneMonth}
         subOneMonth={subOneMonth}
+        keyPrefix={keyPrefix}
       />
     </div>
   );
 };
 
-const getOneMonth = (date: any) => {
+const getOneMonth = (date: DateTime) => {
   let rectCount = 0;
-  const parsedDate: any = date;
-  let dayInWeek: any = getDay(
-    // @ts-ignore
-    new Date(getYear(parsedDate), getMonth(parsedDate), 1)
-  );
-  // @ts-ignore
-  const firstDayInMonth: any =
-    // @ts-ignore
-    new Date(getYear(parsedDate), getMonth(parsedDate), 1);
+  const firstDayInMonth: DateTime = date.set({ day: 1})
+
+  // Get week day
+  let dayInWeek: number = firstDayInMonth.weekday;
+
   const monthDays: any = [];
   if (dayInWeek === 0) {
     dayInWeek = 7;
@@ -245,17 +250,17 @@ const getOneMonth = (date: any) => {
   //Find days for first week at the beginning of month
   // @ts-ignore
   for (let i = dayInWeek - 1; i >= 0; i--) {
-    monthDays.push(subDays(firstDayInMonth, i));
+    monthDays.push(firstDayInMonth.plus({ days: i}));
     rectCount += 1;
   }
   // @ts-ignore
   for (let i = 1; i < 8 - dayInWeek; i++) {
-    monthDays.push(addDays(firstDayInMonth, i));
+    monthDays.push(firstDayInMonth.plus({ days: i}));
     rectCount += 1;
   }
   //Three weeks in middle
   for (let i = 8 - dayInWeek; rectCount < 42; i++) {
-    monthDays.push(addDays(firstDayInMonth, i));
+    monthDays.push(firstDayInMonth.plus({ days: i}));
     rectCount += 1;
   }
 
@@ -263,46 +268,44 @@ const getOneMonth = (date: any) => {
 };
 
 interface IDatePickerProps {
+  keyPrefix?: string;
   data?: any;
   width: number;
   sideMargin: number;
   selectDate: any;
-  selectedDate: Date;
+  selectedDate: DateTime;
   addOneMonth?: any;
   subOneMonth?: any;
   handleScroll?: any;
   height?: number;
 }
 const DatePicker = (props: IDatePickerProps) => {
-  const { selectDate, selectedDate, width, sideMargin } = props;
+  const { selectDate, selectedDate, width, sideMargin, keyPrefix } = props;
   const widthFromHook: number = WidthHook();
 
   const [months, setMonths]: any = useState([]);
 
-  const getDaysInMonthInit = (date: any) => {
-    const initMonths: any = getOneMonth(parseISO(date));
+  const getDaysInMonthInit = (date: DateTime) => {
+    const initMonths: any = getOneMonth(date);
 
     setMonths(initMonths);
   };
 
   const addOneMonth = () => {
-    const newMonth: any = getOneMonth(addMonths(months[14], 1));
+    const newMonth: any = getOneMonth(months[14].plus({ months: 1}));
     setMonths(newMonth);
   };
   const subOneMonth = () => {
-    const newMonth: any = getOneMonth(subMonths(months[14], 1));
+    const newMonth: any = getOneMonth(months[14].minus({months: 1}));
     setMonths(newMonth);
   };
 
   useEffect(() => {
     if (!selectedDate) {
-      const dateNow: any = JSON.parse(JSON.stringify(new Date()));
-      // selectDate(dateNow);
-      // @ts-ignore
+      const dateNow: DateTime = DateTime.local();
       getDaysInMonthInit(dateNow);
     } else {
-      const dateNow: any = JSON.parse(JSON.stringify(selectedDate));
-      getDaysInMonthInit(dateNow);
+      getDaysInMonthInit(selectedDate);
     }
   },        []);
 
@@ -318,6 +321,7 @@ const DatePicker = (props: IDatePickerProps) => {
 
   return (
     <DatePickerView
+        keyPrefix={keyPrefix}
       handleScroll={handleScroll}
       width={width ? width : widthFromHook}
       sideMargin={sideMargin}

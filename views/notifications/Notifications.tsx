@@ -68,7 +68,6 @@ const NotificationsView = () => {
     const notifications: any = useSelector((state: any) => state.notifications);
 
     const renderedNotifications: any = renderNotifications(notifications, isDark);
-    console.log(notifications)
 
     return (
     <div className={parseCssDark('column', isDark)}>

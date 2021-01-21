@@ -86,6 +86,7 @@ const PickerModalView = (props: IPickerModalViewProps) => {
         <div className={'picker__container'}>
           {datePickerIsVisible ? (
             <DatePicker
+                keyPrefix={'pickerModal'}
               width={width - 48}
               sideMargin={24}
               height={(height / 6) * 4}
