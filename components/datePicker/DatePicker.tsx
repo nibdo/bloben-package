@@ -21,6 +21,7 @@ import EvaIcons from 'bloben-common/components/eva-icons';
 import { Context } from '../../context/store';
 import { parseCssDark } from '../../../bloben-common/utils/common';
 import { DateTime } from 'luxon';
+import { getMonthDays } from '../../../components/calendarView/calendar-common';
 
 const parseMonths = (monthNum: number): string => {
   switch (monthNum) {
@@ -64,7 +65,7 @@ const renderDays = (
 ) =>
   data.map((item: any) => (
     <OneDay
-        key={`${keyPrefix}${item.month}${item.day}${item.millisecond}`}
+        key={`${keyPrefix}${item.year}-${item.month}-${item.day}-${item.millisecond}`}
       item={item}
       width={width}
       sideMargin={sideMargin}
@@ -286,17 +287,17 @@ const DatePicker = (props: IDatePickerProps) => {
   const [months, setMonths]: any = useState([]);
 
   const getDaysInMonthInit = (date: DateTime) => {
-    const initMonths: any = getOneMonth(date);
+    const initMonths: any = getMonthDays(date);
 
     setMonths(initMonths);
   };
 
   const addOneMonth = () => {
-    const newMonth: any = getOneMonth(months[14].plus({ months: 1}));
+    const newMonth: any = getMonthDays(months[14].plus({ months: 1}));
     setMonths(newMonth);
   };
   const subOneMonth = () => {
-    const newMonth: any = getOneMonth(months[14].minus({months: 1}));
+    const newMonth: any = getMonthDays(months[14].minus({months: 1}));
     setMonths(newMonth);
   };
 

@@ -27,8 +27,6 @@ export const DatetimeParser = (date: DateTime | string, zone: string): string =>
   if (isLocalDatetime) {
     return thisDate.toString();
   }
-  console.log('toISOString', dateString.toString())
-  console.log('isLocalDatetime', thisDate.toString())
 
   // Adjust date with timezone so when converted to UTC it represents correct value
   // Technically time will be not correct, but user wants it fixed
