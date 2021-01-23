@@ -178,6 +178,7 @@ interface IDropdownViewProps {
   closeDropdown: any;
   children: any;
   variant?: string;
+  className?: string;
 }
 const DropdownView = (props: IDropdownViewProps) => {
   const {
@@ -190,6 +191,7 @@ const DropdownView = (props: IDropdownViewProps) => {
     closeDropdown,
     children,
     variant,
+    className
   } = props;
 
   const { clientX, clientY } = isOpen;
@@ -216,10 +218,9 @@ const DropdownView = (props: IDropdownViewProps) => {
     <div className={'dropdown__anchor'}>
       <div className={'dropdown__wrapper'} onClick={closeDropdown} />
       <div
-        className={parseCssDark('dropdown__container', isDark)}
+        className={`${parseCssDark('dropdown__container', isDark)} ${className ? className : ''}`}
         id={'dropdown'}
         onClick={preventDefault}
-        style={dropdownStyle}
       >
         {children ? children : items}
       </div>
@@ -301,6 +302,7 @@ interface IDropdownProps {
   selectedValue?: any;
   type?: string;
   children?: any;
+  className?: string;
 }
 const Dropdown = (props: IDropdownProps) => {
   const {
@@ -312,6 +314,7 @@ const Dropdown = (props: IDropdownProps) => {
     selectedValue,
     type,
     children,
+    className
   } = props;
 
   const preventDefault = (e: any) => {
@@ -344,6 +347,7 @@ const Dropdown = (props: IDropdownProps) => {
         closeDropdown={closeDropdown}
         children={children}
         variant={variant}
+        className={className}
       />
     )
   ) : null;

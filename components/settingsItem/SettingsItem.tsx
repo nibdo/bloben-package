@@ -15,9 +15,11 @@ interface IButtonItemProps {
   value?: string;
   toogle?: any;
   onClick?: any;
+  dropdown?: any;
+  switchValue?: boolean;
 }
 const ButtonItem = (props: IButtonItemProps) => {
-  const { title, description, icon, value, toogle, onClick } = props;
+  const { title, description, icon, value, toogle, onClick, dropdown, switchValue } = props;
 
   const [store] = useContext(Context);
 
@@ -32,32 +34,45 @@ const ButtonItem = (props: IButtonItemProps) => {
         <p className={parseCssDark('settings-item__title', isDark)}>
           {title}
         </p>
+        {dropdown ?
+            dropdown
+            : null
+        }
         {description ? (
           <p className={parseCssDark('settings-item__description', isDark)}>
             {description}
           </p>
         ) : null}
       </div>
-      {value && !toogle ? (
-        <div className={'settings-item__value-container'}>
-          <p className={parseCssDark('settings-item__value', isDark)}>
-            {valueFormatted}
-          </p>
-        </div>
-      ) : null}
-      {toogle ? (
-        <div className={'settings-item__value-container'}>
-          <div className={parseCssDark('settings-item__value', isDark)}>
-            <Switch
-              checked={!!value}
-              onChange={onClick}
-              color={'primary'}
-              name={'checked'}
-              inputProps={{ 'aria-label': 'primary checkbox' }}
-            />
+
+      {toogle && !switchValue ? (
+          <div className={'settings-item__value-container'}>
+            <div className={parseCssDark('settings-item__value', isDark)}>
+              <Switch
+                  checked={switchValue}
+                  onChange={onClick}
+                  color={'primary'}
+                  name={'checked'}
+                  inputProps={{ 'aria-label': 'primary checkbox' }}
+              />
+            </div>
           </div>
-        </div>
       ) : null}
+
+      {switchValue
+          ?    <div className={'settings-item__value-container'}>
+            <div className={parseCssDark('settings-item__value', isDark)}>
+              <Switch
+                  checked={switchValue}
+                  onChange={onClick}
+                  color={'primary'}
+                  name={'checked'}
+                  inputProps={{ 'aria-label': 'primary checkbox' }}
+              />
+            </div>
+          </div>
+      : null
+      }
     </div>
   );
 };
@@ -69,6 +84,8 @@ interface ISettingsItemProps {
   icon: any;
   toogle?: any;
   description?: string;
+  dropdown?: any;
+  switchValue?: boolean;
 }
 const SettingsItem = (props: ISettingsItemProps) => {
   const { link, onClick } = props;

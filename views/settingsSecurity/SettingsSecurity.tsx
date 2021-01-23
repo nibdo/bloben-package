@@ -63,14 +63,15 @@ const SettingsSecurityView = (props: ISettingsSecurityViewProps) => {
           title={'Encryption'}
           description={lockStatus}
           onClick={openLockDropdown}
+          dropdown={ <Dropdown
+              isOpen={lockDropdown}
+              handleClose={() => setLockDropdown('')}
+              selectedValue={lockStatus}
+              values={lockDropdownValues}
+              onClick={handleLockDropdownChange}
+          />}
         />
-        <Dropdown
-            isOpen={lockDropdown}
-            handleClose={() => setLockDropdown('')}
-            selectedValue={lockStatus}
-            values={lockDropdownValues}
-            onClick={handleLockDropdownChange}
-        />
+
       </div>
 
       <SettingsSecurityRouter />

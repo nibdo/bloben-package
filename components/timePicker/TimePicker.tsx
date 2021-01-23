@@ -8,6 +8,7 @@ import { WidthHook } from 'bloben-common/utils/layout';
 import { parseCssDark } from '../../../bloben-common/utils/common';
 import { Context } from '../../context/store';
 import { DateTime } from 'luxon';
+import { parseToDateTime } from '../../utils/datetimeParser';
 
 const getHoursComponent = (selectedDate: any, selectHour: any, isDark: boolean) => {
   const hours: any[] = [];
@@ -17,6 +18,7 @@ const getHoursComponent = (selectedDate: any, selectHour: any, isDark: boolean) 
 
   return hours.map((hour: any) => (
     <ButtonBase
+        key={hour}
       onClick={() => selectHour(hour)}
       id={`hour_${hour}`}
       className={parseCssDark(`time-picker__text${
@@ -42,7 +44,8 @@ const getMinutesComponent = (selectedDate: any, selectMinute: any, isDark: boole
 
   return minutes.map((minute: any) => (
     <ButtonBase
-      id={`minute_${minute}`}
+        key={minute}
+        id={`minute_${minute}`}
       onClick={() => selectMinute(minute)}
       className={parseCssDark(`time-picker__text${
         minute === selectedDate.minutes ? '--selected' : ''
@@ -60,9 +63,10 @@ interface ITimePickerViewProps {
   selectMinute: any;
   selectHour: any;
   width: number;
+  timezone: string;
 }
 const TimePickerView = (props: ITimePickerViewProps) => {
-  const { selectedDate, selectMinute, selectHour, width } = props;
+  const { selectedDate, selectMinute, selectHour, width, timezone } = props;
 
   const [store] = useContext(Context);
 
@@ -76,7 +80,7 @@ const TimePickerView = (props: ITimePickerViewProps) => {
   const minutes = getMinutesComponent(selectedDate, selectMinute, isDark);
 
   useEffect(() => {
-    const hourNum: number = selectedDate.hours;
+    const hourNum: number = parseToDateTime(selectedDate, timezone).hour;
     const hourEl: any = document.getElementById(`hour_${hourNum}`);
     const hourElement: any = document.querySelector(
       '.time-picker__container-hour'
@@ -88,7 +92,7 @@ const TimePickerView = (props: ITimePickerViewProps) => {
     });
   }, []);
   useEffect(() => {
-    const minuteNum: number = selectedDate.minutes;
+    const minuteNum: number = parseToDateTime(selectedDate, timezone).hour;
     const minuteEl: any = document.getElementById(`minute_${minuteNum}`);
     const minuteElement: any = document.querySelector(
       '.time-picker__container-minute'
@@ -154,21 +158,22 @@ interface ITimePickerProps {
   selectedDate: any;
   selectTime: any;
   width?: number;
+  timezone: string;
 }
 const TimePicker = (props: ITimePickerProps) => {
-  const { width, selectedDate, selectTime } = props;
+  const { width, selectedDate, selectTime, timezone } = props;
 
   const widthFromHook: number = WidthHook();
 
   const isMobile: boolean = useSelector((state: any) => state.isMobile);
 
   const selectHour = (hour: any) => {
-    const dateValue: any = selectedDate ? selectedDate : DateTime.local();
+    const dateValue: any = parseToDateTime(selectedDate, timezone);
     const newDate: any = dateValue.set({ hour });
     selectTime(newDate);
   };
   const selectMinute = (minute: any) => {
-    const dateValue: any = selectedDate ? selectedDate : DateTime.local();
+    const dateValue: any = selectedDate ?  DateTime.fromISO(selectedDate) : DateTime.local();
 
     const newDate: any = dateValue.set({ minute });
 
@@ -181,6 +186,7 @@ const TimePicker = (props: ITimePickerProps) => {
       selectedDate={selectedDate}
       selectHour={selectHour}
       selectMinute={selectMinute}
+      timezone={timezone}
     />
   );
 };

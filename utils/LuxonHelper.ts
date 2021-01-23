@@ -27,9 +27,10 @@ const LuxonHelper = {
   isToday: (dateA: DateTime): boolean =>
     dateA.hasSame(DateTime.local(), "day"),
 
-  toUtc: (date: DateTime): string => {
-    return date.toUTC().toISO()
-  }
+  toUtcString: (date: string): string =>
+      DateTime.fromISO(date).toUTC().toISO(),
+  toUtc: (date: DateTime): string =>
+     date.toUTC().toISO()
 };
 
 export default LuxonHelper;

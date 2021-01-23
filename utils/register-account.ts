@@ -17,7 +17,7 @@ const DEFAULT_CALENDAR_DATA: any = {
   name: DEFAULT_CALENDAR_NAME,
   color: 'indigo',
   reminders: [],
-  timezone: 'device', // Default settings for privacy reasons
+  timezone: getLocalTimezone(),
 };
 
 export default async (

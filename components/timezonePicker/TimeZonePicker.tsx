@@ -7,16 +7,17 @@ import { parseCssDark } from '../../../bloben-common/utils/common';
 import { Context } from '../../context/store';
 import ScrollView from '../../../bloben-common/components/scrollView/ScrollView';
 import SearchHeader from '../searchHeader/SearchHeader';
-import { parseTimezoneTextWithOffset } from '../../utils/common';
+import { getLocalTimezone, parseTimezoneTextWithOffset } from '../../utils/common';
 
 interface IOneTimezoneProps {
   name: string;
   selectTimezone: any;
   isDark: boolean;
   handleClose: any;
+  localTimezone?: string;
 }
 const OneTimezone = (props: IOneTimezoneProps) => {
-  const { name, isDark, selectTimezone, handleClose } = props;
+  const { name, isDark, selectTimezone, handleClose, localTimezone } = props;
 
   const handleSelect = () => {
     selectTimezone(name)
@@ -27,13 +28,13 @@ const OneTimezone = (props: IOneTimezoneProps) => {
       className={parseCssDark('timezone__container', isDark)}
       onClick={handleSelect}
     >
-    <p className={parseCssDark('timezone__text', isDark)}>{parseTimezoneTextWithOffset(name)}</p>
+    <p className={parseCssDark('timezone__text', isDark)}>{parseTimezoneTextWithOffset(name, undefined, localTimezone)}</p>
   </ButtonBase>;
 };
 
-const renderResults = (data: string[], selectTimezone: any, handleClose: any, isDark: boolean) =>
+const renderResults = (data: string[], selectTimezone: any, handleClose: any, isDark: boolean, localTimezone?: string) =>
   data.map((item: string) => (
-    <OneTimezone key={item} name={item} isDark={isDark} handleClose={handleClose} selectTimezone={selectTimezone} />
+    <OneTimezone key={item} name={item} isDark={isDark} handleClose={handleClose} selectTimezone={selectTimezone} localTimezone={localTimezone}/>
   ));
 
 interface ITimePickerViewProps {
@@ -43,6 +44,7 @@ interface ITimePickerViewProps {
   onSearchInput: any;
   typedText: string;
   results: string[];
+  localTimezone?: string;
 }
 const TimeZonePickerView = (props: ITimePickerViewProps) => {
   const [store] = useContext(Context);
@@ -55,10 +57,11 @@ const TimeZonePickerView = (props: ITimePickerViewProps) => {
     results,
     handleClearSearch,
     onSearchInput,
-    typedText
+    typedText,
+    localTimezone
   } = props;
 
-  const timezoneResults: any = renderResults(results, selectTimezone, onClose, isDark);
+  const timezoneResults: any = renderResults(results, selectTimezone, onClose, isDark, localTimezone);
 
   return (
     <div className={parseCssDark('column', isDark)}>
@@ -77,12 +80,20 @@ const TimeZonePickerView = (props: ITimePickerViewProps) => {
 interface ITimeZonePickerProps {
   selectTimezone: any;
   onClose: any;
+  floatDisabled?: boolean;
 }
-const TimeZonePicker = (props: ITimeZonePickerProps) => {
-  const [typedText, setTypedText] = useState('');
-  const [results, setResults]: any = useState(['device', 'floating']);
 
-  const { selectTimezone, onClose } = props;
+const TimeZonePicker = (props: ITimeZonePickerProps) => {
+  const { selectTimezone, onClose, floatDisabled } = props;
+
+  const localTimezone: string = getLocalTimezone()
+
+  const DEFAULT_RESULT_SETTINGS: string[] = floatDisabled ? [localTimezone] : [localTimezone, 'floating'];
+
+  const [typedText, setTypedText] = useState('');
+  const [results, setResults]: any = useState(DEFAULT_RESULT_SETTINGS);
+
+
 
   const timezones: string[] = useSelector((state: any) => state.timezones);
 
@@ -92,12 +103,12 @@ const TimeZonePicker = (props: ITimeZonePickerProps) => {
 
   const handleClearSearch = () => {
     setTypedText('');
-    setResults(['device', 'floating']);
+    setResults(DEFAULT_RESULT_SETTINGS);
   };
 
   useEffect(() => {
     if (typedText.length < 1) {
-      setResults(['device', 'floating']);
+      setResults(DEFAULT_RESULT_SETTINGS);
 
       return;
     }
@@ -107,7 +118,7 @@ const TimeZonePicker = (props: ITimeZonePickerProps) => {
   }, [typedText]);
 
   const search = (keyWord: string) => {
-    const result: any = ['device', 'floating'];
+    const result: any = DEFAULT_RESULT_SETTINGS;
 
     if (keyWord.length >= 3) {
       for (const item of timezones) {
@@ -128,6 +139,7 @@ const TimeZonePicker = (props: ITimeZonePickerProps) => {
       onSearchInput={onSearchInput}
       typedText={typedText}
       results={results}
+      localTimezone={localTimezone}
     />
   );
 };

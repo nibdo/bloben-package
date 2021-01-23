@@ -36,6 +36,18 @@ const AppearanceView = (props: IAppearanceViewProps) => {
   const [store] = useContext(Context);
   const { isDark } = store;
 
+  const renderDropdown = () => {
+    return <Dropdown
+        isOpen={themeDropdown}
+        handleClose={() => setThemeDropdown('')}
+        selectedValue={currentTheme}
+        values={dropdownValues}
+        onClick={handleThemeChange}
+    />
+  }
+
+  const dropdown: any = renderDropdown();
+
   return (
     <div className={`column${isDark ? '-dark' : ''}`}>
       <HeaderModal />
@@ -50,14 +62,9 @@ const AppearanceView = (props: IAppearanceViewProps) => {
           title={'Theme'}
           onClick={openThemeDropdown}
           description={capitalStart(currentTheme)}
+          dropdown={dropdown}
         />
-        <Dropdown
-          isOpen={themeDropdown}
-          handleClose={() => setThemeDropdown('')}
-          selectedValue={currentTheme}
-          values={dropdownValues}
-          onClick={handleThemeChange}
-        />
+
       </div>
     </div>
   );

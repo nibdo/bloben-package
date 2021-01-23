@@ -1,0 +1,17 @@
+@import "bloben-common/globals/theme.scss";
+
+.settings-subtitle__container {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 6px 48px 16px 48px;
+}
+.settings-subtitle__text {
+  color: $PRIMARY_LIGHT;
+  font-size: 1.4rem;
+}
+.settings-subtitle__text-dark {
+  @extend .settings-subtitle__text;
+  color: $PRIMARY_DARK;
+}

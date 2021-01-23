@@ -23,6 +23,7 @@ interface IPickerModalViewProps {
   setDatePickerVisible: any;
   datePickerIsVisible: boolean;
   dateOnly: boolean;
+  timezone?: string;
 }
 const PickerModalView = (props: IPickerModalViewProps) => {
   const {
@@ -33,6 +34,7 @@ const PickerModalView = (props: IPickerModalViewProps) => {
     setDatePickerVisible,
     datePickerIsVisible,
     dateOnly,
+    timezone
   } = props;
 
   const [store] = useContext(Context);
@@ -84,17 +86,17 @@ const PickerModalView = (props: IPickerModalViewProps) => {
           </ButtonBase>
         ) : null}
         <div className={'picker__container'}>
-          {datePickerIsVisible ? (
-            <DatePicker
-                keyPrefix={'pickerModal'}
-              width={width - 48}
-              sideMargin={24}
-              height={(height / 6) * 4}
-              selectDate={setDate}
-              selectedDate={selectedDate}
-            />
+          {!datePickerIsVisible && timezone ? (
+              <TimePicker selectTime={setTime} selectedDate={selectedDate} timezone={timezone}/>
           ) : (
-            <TimePicker selectTime={setTime} selectedDate={selectedDate} />
+            <DatePicker
+            keyPrefix={'pickerModal'}
+            width={width - 48}
+            sideMargin={24}
+            height={(height / 6) * 4}
+            selectDate={setDate}
+            selectedDate={selectedDate}
+            />
           )}
         </div>
       </div>
@@ -107,6 +109,7 @@ interface IPickerModalProps {
   handleCloseModal: any;
   dateOnly: boolean;
   selectDate: any;
+  timezone?: string;
 }
 const PickerModal = (props: IPickerModalProps) => {
   const [datePickerIsVisible, setDatePickerVisible] = useState(true);
@@ -115,6 +118,7 @@ const PickerModal = (props: IPickerModalProps) => {
     selectDate,
     handleCloseModal,
     dateOnly,
+    timezone
   } = props;
 
   const setDate = (date: any) => {
@@ -167,6 +171,7 @@ const PickerModal = (props: IPickerModalProps) => {
       handleCloseModal={handleCloseModal}
       setDatePickerVisible={setDatePickerVisible}
       datePickerIsVisible={datePickerIsVisible}
+      timezone={timezone}
     />
   );
 };

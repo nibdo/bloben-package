@@ -152,15 +152,19 @@ export const parseTimezoneText = (zone: string): string => {
     return zone;
 }
 
-export const parseTimezoneTextWithOffset = (zone: string, currentDate?: Date): string => {
+export const parseTimezoneTextWithOffset = (zone: string, currentDate?: Date, localTimezone?: string): string => {
     const date: Date = currentDate ? currentDate : new Date();
 
-    if (zone === 'device') {
+    if (zone === localTimezone) {
         const timezoneOffsetString: string = getTimezoneOffset(date);
 
         const timezoneDevice: string = getLocalTimezone();
 
         return `Device (${timezoneDevice}) ${timezoneOffsetString}`;
+    }
+
+    if (zone === 'floating') {
+        return 'Floating fixed time'
     }
 
     return `${zone}`;

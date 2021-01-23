@@ -133,7 +133,7 @@ interface IMonthProps {
   width: number;
   sideMargin: number;
   selectDate: any;
-  selectedDate: DateTime;
+  selectedDate: string;
   addOneMonth: any;
   subOneMonth: any;
 }
@@ -199,7 +199,7 @@ interface IDatePickerViewProps {
   width: number;
   sideMargin: number;
   selectDate: any;
-  selectedDate: DateTime;
+  selectedDate: string;
   addOneMonth: any;
   subOneMonth: any;
   handleScroll: any;
@@ -274,7 +274,7 @@ interface IDatePickerProps {
   width: number;
   sideMargin: number;
   selectDate: any;
-  selectedDate: DateTime;
+  selectedDate: string;
   addOneMonth?: any;
   subOneMonth?: any;
   handleScroll?: any;
@@ -306,7 +306,7 @@ const DatePicker = (props: IDatePickerProps) => {
       const dateNow: DateTime = DateTime.local();
       getDaysInMonthInit(dateNow);
     } else {
-      getDaysInMonthInit(selectedDate);
+      getDaysInMonthInit(DateTime.fromISO(selectedDate));
     }
   },        []);
 
