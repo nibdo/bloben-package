@@ -40,7 +40,7 @@ export const DatetimeParser = (
     return dateConvert.setZone(deviceTimezone).toString();
   }
 
-  return thisDate.toString();
+  return thisDate.setZone(zone).toString();
 };
 
 export const parseToDateTime = (
@@ -68,5 +68,5 @@ export const parseToDateTime = (
     return thisDate.setZone(zone).setZone(deviceTimezone)
   }
 
-  return thisDate;
+  return thisDate.setZone(zone);
 };
