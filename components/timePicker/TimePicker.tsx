@@ -22,7 +22,7 @@ const getHoursComponent = (selectedDate: any, selectHour: any, isDark: boolean) 
       onClick={() => selectHour(hour)}
       id={`hour_${hour}`}
       className={parseCssDark(`time-picker__text${
-        hour === selectedDate.hours ? '--selected' : ''
+        hour === DateTime.fromISO(selectedDate).hour ? '--selected' : ''
       }`, isDark)}
     >
       {hour}
@@ -48,7 +48,7 @@ const getMinutesComponent = (selectedDate: any, selectMinute: any, isDark: boole
         id={`minute_${minute}`}
       onClick={() => selectMinute(minute)}
       className={parseCssDark(`time-picker__text${
-        minute === selectedDate.minutes ? '--selected' : ''
+        minute === DateTime.fromISO(selectedDate).minute ? '--selected' : ''
       }`, isDark)}
     >
       {minute}

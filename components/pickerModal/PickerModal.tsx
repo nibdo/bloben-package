@@ -14,6 +14,7 @@ import DatePicker from '../datePicker/DatePicker';
 import TimePicker from '../timePicker/TimePicker';
 import { HeightHook, WidthHook } from 'bloben-common/utils/layout';
 import { Context } from '../../context/store';
+import { DateTime } from 'luxon';
 
 interface IPickerModalViewProps {
   selectedDate: any;
@@ -34,20 +35,20 @@ const PickerModalView = (props: IPickerModalViewProps) => {
     setDatePickerVisible,
     datePickerIsVisible,
     dateOnly,
-    timezone
+    timezone,
   } = props;
 
   const [store] = useContext(Context);
 
-  const {isDark} = store;
+  const { isDark } = store;
 
   const width: number = WidthHook();
   const height: number = HeightHook();
 
   return (
     <BottomSheet
-        backdropClassName={isDark ? 'bottom-sheet__backdrop--dark' : ''}
-        containerClassName={isDark ? 'bottom-sheet__container--dark' : ''}
+      backdropClassName={isDark ? 'bottom-sheet__backdrop--dark' : ''}
+      containerClassName={isDark ? 'bottom-sheet__container--dark' : ''}
       isExpandable={false}
       customHeight={(height / 4) * (dateOnly ? 2 : 3)}
       onClose={handleCloseModal}
@@ -87,15 +88,19 @@ const PickerModalView = (props: IPickerModalViewProps) => {
         ) : null}
         <div className={'picker__container'}>
           {!datePickerIsVisible && timezone ? (
-              <TimePicker selectTime={setTime} selectedDate={selectedDate} timezone={timezone}/>
+            <TimePicker
+              selectTime={setTime}
+              selectedDate={selectedDate}
+              timezone={timezone}
+            />
           ) : (
             <DatePicker
-            keyPrefix={'pickerModal'}
-            width={width - 48}
-            sideMargin={24}
-            height={(height / 6) * 4}
-            selectDate={setDate}
-            selectedDate={selectedDate}
+              keyPrefix={'pickerModal'}
+              width={width - 48}
+              sideMargin={24}
+              height={(height / 6) * 4}
+              selectDate={setDate}
+              selectedDate={selectedDate}
             />
           )}
         </div>
@@ -118,48 +123,33 @@ const PickerModal = (props: IPickerModalProps) => {
     selectDate,
     handleCloseModal,
     dateOnly,
-    timezone
+    timezone,
   } = props;
 
-  const setDate = (date: any) => {
+  const setDate = (date: DateTime) => {
     if (!selectedDate) {
-      selectDate(
-        new Date(
-          getYear(date),
-          getMonth(date),
-          getDate(date),
-          getHours(new Date())
-        )
-      );
+      selectDate(date.set({ hour: DateTime.local().hour }).toString());
 
       return;
     }
     // If there is reminder set, preserve time from it
-    const dateTime: any = new Date(
-      getYear(date),
-      getMonth(date),
-      getDate(date),
-      getHours(new Date(selectedDate)),
-      getMinutes(new Date(selectedDate))
-    );
+    const dateTimeFromIso: DateTime = DateTime.fromISO(selectedDate);
+    const dateTime: any = date
+      .set({ hour: dateTimeFromIso.hour })
+      .set({ minute: dateTimeFromIso.minute })
+      .toString();
+
     selectDate(dateTime);
   };
 
-  const setTime = (date: any) => {
+  const setTime = (date: DateTime) => {
     if (!selectedDate) {
-      selectDate(
-        new Date(
-          getYear(new Date()),
-          getMonth(new Date()),
-          getDate(new Date()),
-          getHours(date)
-        )
-      );
+      selectDate(DateTime.local().set({ hour: date.hour }).toString());
 
       return;
     }
     // If there is reminder set, preserve time from it
-    selectDate(date);
+    selectDate(date.toString());
   };
 
   return (

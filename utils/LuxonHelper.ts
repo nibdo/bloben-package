@@ -22,7 +22,14 @@ const LuxonHelper = {
   },
 
   isBefore: (dateA: string, dateB: string): boolean =>
-      DateTime.fromISO(dateB).millisecond - DateTime.fromISO(dateA).millisecond > 0,
+      DateTime.fromISO(dateB).valueOf() - DateTime.fromISO(dateA).valueOf() > 0,
+
+  isBeforeAny: (dateA: string, dateB: string): boolean => {
+    const dateADateTime: DateTime = LuxonHelper.parseToDateTime(dateA);
+    const dateBDateTime: DateTime = LuxonHelper.parseToDateTime(dateB);
+
+    return dateBDateTime.valueOf() - dateADateTime.valueOf() > 0;
+  },
 
   isToday: (dateA: DateTime): boolean =>
     dateA.hasSame(DateTime.local(), "day"),

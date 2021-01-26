@@ -22,6 +22,7 @@ import { Context } from '../../context/store';
 import { parseCssDark } from '../../../bloben-common/utils/common';
 import { DateTime } from 'luxon';
 import { getMonthDays } from '../../../components/calendarView/calendar-common';
+import LuxonHelper from '../../utils/LuxonHelper';
 
 const parseMonths = (monthNum: number): string => {
   switch (monthNum) {
@@ -102,7 +103,7 @@ const OneDay = (props: IOneDayProps) => {
   };
 
   const isSameMonthValue: boolean = item.hasSame(monthDayRef, 'month')
-  const isSelectedDate: boolean = item.hasSame(selectDate, 'month');
+  const isSelectedDate: boolean = LuxonHelper.isSameDay(item, selectedDate);
 
   const [store] = useContext(Context);
 
