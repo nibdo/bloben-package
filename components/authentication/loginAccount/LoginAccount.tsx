@@ -291,6 +291,7 @@ const LoginAccount = () => {
         }
       }
     } catch (err) {
+      dispatch(setIsAppStarting(false));
       logger(err.toString());
     }
   };

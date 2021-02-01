@@ -200,13 +200,17 @@ const RegisterAccount = () => {
         username,
       };
 
-      const response: AxiosResponse = await AccountApi.checkUsername(data);
-      if (response.data.isTaken) {
-        setLocalState('warningUsername', 'Username is taken');
-        reject();
-      }
+      try {
+        const response: AxiosResponse = await AccountApi.checkUsername(data);
+        if (response.data.isTaken) {
+          setLocalState('warningUsername', 'Username is taken');
+          reject();
+        }
 
-      resolve();
+        resolve();
+      } catch (e) {
+        reject(e)
+      }
     });
 
   const validateAccount = async () => {

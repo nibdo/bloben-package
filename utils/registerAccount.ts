@@ -83,6 +83,7 @@ const registerAccountDemo = async (
       // await initUser(dispatch);
     }
   } catch (error) {
+    reduxStore.dispatch(setIsAppStarting(false))
     logger(error);
   }
 
