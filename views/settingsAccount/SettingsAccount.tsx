@@ -9,12 +9,18 @@ import DeleteAccount
 import Modal from '../../components/modal/Modal';
 import { Context } from '../../context/store';
 import HeaderModal from '../../components/headerModal/HeaderModal';
+import SetEmail from '../../components/authentication/setEmail/SetEmail';
 
 const SettingsAccountRouter = (props: any) =>
   (
     <div>
+        <Route path={'/settings/account/email'}>
+            <Modal >
+                <SetEmail />
+            </Modal>
+        </Route>
       <Route path={'/settings/account/delete'}>
-        <Modal {...props}>
+        <Modal >
           <DeleteAccount />
         </Modal>
       </Route>
@@ -30,6 +36,15 @@ const SettingsAccountView = () => {
       <HeaderModal />
       <div className={'settings__container'}>
         <MobileTitle title={'Account'} />
+          {/*<SettingsItem*/}
+          {/*    icon={*/}
+          {/*        <EvaIcons.Email*/}
+          {/*            className={`svg-icon settings__icon${isDark ? '-dark' : ''}`}*/}
+          {/*        />*/}
+          {/*    }*/}
+          {/*    title={'Email'}*/}
+          {/*    link={'account/email'}*/}
+          {/*/>*/}
         <SettingsItem
           icon={
             <EvaIcons.Trash
