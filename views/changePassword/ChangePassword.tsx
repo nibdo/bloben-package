@@ -1,7 +1,6 @@
 import React, { useContext, useReducer } from 'react';
 import Utils from './ChangePassword.utils';
 import MobileTitle from '../../components/title/Title';
-import { useSelector } from 'react-redux';
 import StateReducer from '../../utils/state-reducer';
 import InputForm from '../../../bloben-common/components/inputForm/InputForm';
 import Landing from 'bloben-common/components/landing/Landing';
@@ -63,6 +62,8 @@ const InputContainer = (props: IInputContainerProps) => {
         isPassword={true}
         autoComplete={'off'}
         error={warningPassword}
+        isDark={isDark}
+
       />
     </div>
   );

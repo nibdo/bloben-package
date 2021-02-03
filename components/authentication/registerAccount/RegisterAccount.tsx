@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AxiosResponse } from 'axios';
@@ -17,6 +17,8 @@ import {
 import { logger } from 'bloben-common/utils/common';
 import Axios from 'bloben-common/utils/axios';
 import StateReducer from 'bloben-package/utils/state-reducer';
+import Checkbox from '../../../../bloben-common/components/checkbox/Checkbox';
+import { Context } from '../../../context/store';
 
 // RFC 5054 2048bit constants
 const rfc5054: any = {
@@ -40,6 +42,9 @@ interface IInputContainerProps {
   warningPassword?: string;
   onChange: any;
   validateAccount: any;
+  privacyPolicyAccepted: boolean;
+  termsAccepted: boolean;
+  handleCheckboxClick: any;
 }
 const InputContainer = (props: IInputContainerProps) => {
   const {
@@ -49,9 +54,13 @@ const InputContainer = (props: IInputContainerProps) => {
     warningUsername,
     onChange,
     validateAccount,
+    privacyPolicyAccepted,
+    termsAccepted,
+    handleCheckboxClick
   } = props;
 
   const isDark: boolean = useSelector((state: any) => state.isDark);
+  const isButtonDisabled: boolean = !privacyPolicyAccepted || !termsAccepted || username.length < 1 || password.length < 1 || repeatedPassword.length < 1;
 
   return (
     <Landing.ContainerForm>
@@ -92,10 +101,25 @@ const InputContainer = (props: IInputContainerProps) => {
         forceIsDarkFalse={true}
       />
       <Landing.Separator />
+
+      <Checkbox isDark={false} name={'termsAccepted'} value={termsAccepted} handleClick={handleCheckboxClick}
+                text={<p>I agree with <a href={'https://bloben.com/terms'} className='primary-color' target={'_blank'}>Terms of Service</a></p>}
+      />
+      <Landing.Separator />
+      <Checkbox isDark={false} name={'privacyPolicyAccepted'} value={privacyPolicyAccepted} handleClick={handleCheckboxClick}
+                text={<p>I agree with <a href={'https://bloben.com/privacy'} className='primary-color' target={'_blank'}>Privacy Policy</a></p>}
+      />
+      <Landing.Separator />
       <Landing.Separator />
 
-      <Landing.ButtonPrimary onClick={validateAccount} title={'Continue '} />
+      <Landing.ButtonPrimary onClick={validateAccount} title={'Register'} disabled={isButtonDisabled}/>
       <Landing.Separator />
+      <Landing.Separator />
+
+      <div className={'landing__wrap-text'}>
+        <p className={'landing__text'} style={{ textAlign: 'justify'}}>By clicking on Register you agree with <a href={'https://bloben.com/terms'} className='primary-color' target={'_blank'}>Terms of Service</a> and <a href={'https://bloben.com/privacy'} className='primary-color' target={'_blank'}>Privacy Policy</a>. Please read them before.</p>
+      </div>
+        <Landing.Separator />
     </Landing.ContainerForm>
   );
 };
@@ -108,6 +132,9 @@ interface IRegisterAccountViewProps {
   warningPassword?: string;
   onChange: any;
   validateAccount: any;
+  privacyPolicyAccepted: boolean;
+  termsAccepted: boolean;
+  handleCheckboxClick: any;
 }
 const RegisterAccountView = (props: IRegisterAccountViewProps) => {
   const {
@@ -118,6 +145,9 @@ const RegisterAccountView = (props: IRegisterAccountViewProps) => {
     warningPassword,
     onChange,
     validateAccount,
+    termsAccepted,
+    privacyPolicyAccepted,
+    handleCheckboxClick
   } = props;
 
   return (
@@ -132,6 +162,9 @@ const RegisterAccountView = (props: IRegisterAccountViewProps) => {
             warningPassword={warningPassword}
             onChange={onChange}
             validateAccount={validateAccount}
+            termsAccepted={termsAccepted}
+            privacyPolicyAccepted={privacyPolicyAccepted}
+            handleCheckboxClick={handleCheckboxClick}
           />
         </Landing.Container>
       </Landing.OneScreen>
@@ -141,6 +174,10 @@ const RegisterAccountView = (props: IRegisterAccountViewProps) => {
 };
 
 const RegisterAccount = () => {
+  const [store, dispatchContext] = useContext(Context);
+  const setContext = (type: string, payload: any) => {
+    dispatchContext({ type, payload });
+  };
   const [registerState, dispatchState] = useReducer(StateReducer, Utils.state);
   const dispatch: any = useDispatch();
 
@@ -151,6 +188,8 @@ const RegisterAccount = () => {
     warningUsername,
     warningPassword,
     isLoading,
+    termsAccepted,
+    privacyPolicyAccepted,
   }: any = registerState;
 
   const setLocalState = (stateName: string, data: any): void => {
@@ -175,7 +214,9 @@ const RegisterAccount = () => {
     const value = e.target.value;
     setLocalState(name, value);
   };
-
+  const handleCheckboxClick = (name: string, value: boolean): void => {
+    setLocalState(name, value);
+  };
   /**
    * Create verifier and salt from new SRP client
    */
@@ -209,7 +250,7 @@ const RegisterAccount = () => {
 
         resolve();
       } catch (e) {
-        reject(e)
+        reject(e);
       }
     });
 
@@ -218,6 +259,21 @@ const RegisterAccount = () => {
     try {
       // Validate password
       try {
+        if (password.length < 5 || repeatedPassword.length < 5) {
+          setContext('showSnackbar', {
+            text: 'Warning: Password is too short',
+          });
+
+          return;
+        }
+
+        if (password !== repeatedPassword) {
+          setContext('showSnackbar', {
+            text: 'Warning: Passwords are not matching',
+          });
+
+          return;
+        }
         await Utils.validateAccountPassword(password, repeatedPassword);
       } catch (error) {
         setLocalState('warningPassword', error);
@@ -233,7 +289,7 @@ const RegisterAccount = () => {
         const srpData = createVerifier();
         const { salt, verifier } = srpData;
 
-        const result: any = await register(username, password, salt, verifier);
+        const result: any = await register(username, password, salt, verifier, termsAccepted, privacyPolicyAccepted);
 
         // Save PGP keys
         dispatch(setPgpKeys(result.pgpKeys));
@@ -272,6 +328,9 @@ const RegisterAccount = () => {
       warningPassword={warningPassword}
       onChange={onChange}
       validateAccount={validateAccount}
+      termsAccepted={termsAccepted}
+      privacyPolicyAccepted={privacyPolicyAccepted}
+      handleCheckboxClick={handleCheckboxClick}
     />
   );
 };

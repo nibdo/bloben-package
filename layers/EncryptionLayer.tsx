@@ -22,6 +22,7 @@ import LoadingScreen from '../../bloben-common/components/loadingScreen/LoadingS
 
 const EncryptionLayer = () => {
   const [store, dispatch] = useContext(Context);
+  const {isDark} = store;
 
   const [isStorageEncrypted, setIsStorageEncrypted] = useState(false);
   const [state, setState] = useState(null);
@@ -248,7 +249,7 @@ const EncryptionLayer = () => {
       ) : null}
 
       <Snackbar />
-      {isLoading ? <LoadingScreen /> : null}
+      {isLoading ? <LoadingScreen  isDark={isDark}/> : null}
     </div>
   );
 };

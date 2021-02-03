@@ -93,13 +93,13 @@ const InputContainer = (props: IInputContainerProps) => {
       <Landing.Separator />
       <Landing.ButtonPrimary title={'Login'} onClick={verifyAccount} />
       <Landing.Separator />
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Landing.Text text={"Don't have account?"} />
-      </div>
-      <Landing.ButtonSecondary
-        title={'Register'}
-        onClick={redirectToRegister}
-      />
+      {/*<div style={{ display: 'flex', justifyContent: 'center' }}>*/}
+      {/*  <Landing.Text text={"Don't have account?"} />*/}
+      {/*</div>*/}
+      {/*<Landing.ButtonSecondary*/}
+      {/*  title={'Register'}*/}
+      {/*  onClick={redirectToRegister}*/}
+      {/*/>*/}
     </Landing.ContainerForm>
   );
 };

@@ -25,6 +25,8 @@ export default async (
   password: string,
   salt: string,
   verifier: string,
+  termsAccepted: boolean,
+  privacyPolicyAccepted: boolean,
   isDemo: boolean = false
 ): Promise<any> => {
   // Process registration
@@ -58,6 +60,8 @@ export default async (
     calendar: encryptedCalendar,
     publicKey,
     privateKey: encryptedPrivateKeyPassword,
+    termsAccepted,
+    privacyPolicyAccepted,
     isDemo,
   };
 

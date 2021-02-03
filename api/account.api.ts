@@ -21,6 +21,11 @@ const AccountApi = {
 
     return response;
   },
+  exportAll: async () => {
+    const response: AxiosResponse = await Axios.get(`/${USER_PATH_URL}/export`);
+
+    return response;
+  },
   /*
    * Get user's services
    */

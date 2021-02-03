@@ -63,6 +63,8 @@ const registerAccountDemo = async (
       password,
       salt,
       verifier,
+      false,
+      false,
       true
     );
 

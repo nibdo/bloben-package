@@ -24,37 +24,44 @@ interface IPinInputDesktopProps {
   pinCode: string;
   repeatedPinCode: string;
 }
-const PinInputDesktop = (props: IPinInputDesktopProps) => (
-  <div
-    style={{
-      width: 250,
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }}
-  >
-    <InputForm
-      name={'pinCode'}
-      isPassword={true}
-      label={'PIN code'}
-      value={props.pinCode}
-      onChange={props.handleDesktopOnChange}
-      maxLength={PIN_CODE_LENGTH}
-    />
-    <Landing.Separator />
-    <InputForm
-      name={'repeatedPinCode'}
-      isPassword={true}
-      label={'Repeat PIN code'}
-      value={props.repeatedPinCode}
-      onChange={props.handleDesktopOnChange}
-      maxLength={PIN_CODE_LENGTH}
-    />
-    <Landing.Separator />
-    <Landing.ButtonPrimary title={'Confirm'} onClick={props.handleClick} />
-  </div>
-);
+const PinInputDesktop = (props: IPinInputDesktopProps) => {
+  const [store] = useContext(Context);
+  const {isDark} = store;
+
+  return (
+      <div
+          style={{
+            width: 250,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+      >
+        <InputForm
+            name={'pinCode'}
+            isPassword={true}
+            label={'PIN code'}
+            value={props.pinCode}
+            onChange={props.handleDesktopOnChange}
+            maxLength={PIN_CODE_LENGTH}
+            isDark={isDark}
+        />
+        <Landing.Separator />
+        <InputForm
+            name={'repeatedPinCode'}
+            isPassword={true}
+            label={'Repeat PIN code'}
+            value={props.repeatedPinCode}
+            onChange={props.handleDesktopOnChange}
+            maxLength={PIN_CODE_LENGTH}
+            isDark={isDark}
+        />
+        <Landing.Separator />
+        <Landing.ButtonPrimary title={'Confirm'} onClick={props.handleClick} />
+      </div>
+  );
+}
 
 interface IInputContainerProps {
     value: string;

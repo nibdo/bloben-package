@@ -265,7 +265,7 @@ const DropdownDesktopView = (props: IDropdownDesktopViewProps) => {
       <div
         className={`dropdown__container${isDark ? '-dark' : ''}`}
         onClick={preventDefault}
-        style={{ top: 15, right: -5, overflow: 'hidden' }}
+        style={{ top: 15, left: -100, overflow: 'hidden' }}
         // style={dropdownStyle}
       >
         <p className={'dropdown__text-bold'}>{username}</p>

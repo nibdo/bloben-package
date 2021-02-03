@@ -6,6 +6,8 @@ export default {
     warningUsername: '',
     warningPassword: '',
     isLoading: false,
+    termsAccepted: false,
+    privacyPolicyAccepted: false,
   },
   validateAccountPassword: (
     password: string,
@@ -16,6 +18,7 @@ export default {
         reject('Passwords are not matching');
         // tslint:disable-next-line:no-magic-numbers
       } else if (password.length < 4 || repeatedPassword.length < 4) {
+
         reject('Password is too short');
       } else {
         resolve('ok');
