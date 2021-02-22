@@ -2,8 +2,8 @@ import { v4 } from 'uuid';
 import Crypto from './encryption';
 import CalendarStateEntity, {
   CalendarBodyToSend,
-} from '../../data/entities/state/calendar.entity';
-import OpenPgp, { PgpKeys } from './OpenPgp';
+} from '../../data/models/state/calendar.entity';
+import OpenPgp, { PgpKeys } from '../../bloben-utils/utils/OpenPgp';
 import { getLocalTimezone } from './common';
 
 const DEFAULT_CALENDAR_NAME = 'My calendar';
@@ -16,7 +16,7 @@ const DEFAULT_CALENDAR_COLOR = {
 const DEFAULT_CALENDAR_DATA: any = {
   name: DEFAULT_CALENDAR_NAME,
   color: 'indigo',
-  reminders: [],
+  alarms: [],
   timezone: getLocalTimezone(),
 };
 

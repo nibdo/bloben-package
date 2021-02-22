@@ -58,7 +58,7 @@ const InputContainer = (props: IInputContainerProps) => {
     warningPassword,
     verifyAccount,
     onChange,
-    redirectToRegister
+    redirectToRegister,
   } = props;
 
   const isDark: any = useSelector((state: any) => state.isDark);
@@ -93,13 +93,13 @@ const InputContainer = (props: IInputContainerProps) => {
       <Landing.Separator />
       <Landing.ButtonPrimary title={'Login'} onClick={verifyAccount} />
       <Landing.Separator />
-      {/*<div style={{ display: 'flex', justifyContent: 'center' }}>*/}
-      {/*  <Landing.Text text={"Don't have account?"} />*/}
-      {/*</div>*/}
-      {/*<Landing.ButtonSecondary*/}
-      {/*  title={'Register'}*/}
-      {/*  onClick={redirectToRegister}*/}
-      {/*/>*/}
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <Landing.Text text={"Don't have account?"} />
+      </div>
+      <Landing.ButtonSecondary
+        title={'Register'}
+        onClick={redirectToRegister}
+      />
     </Landing.ContainerForm>
   );
 };
@@ -260,31 +260,21 @@ const LoginAccount = () => {
 
       dispatch(setIsAppStarting(false));
 
-      if (response && (cryptoPassword || privateKey)) {
+      if (response && privateKey) {
         dispatch(setIsLogged(true));
         dispatch(setUsername(username));
 
-        // Backward compatibility for older accounts with just cryptoPassword
+        const privateKeyArmorDecrypted: any = await Crypto.decrypt(
+          privateKey,
+          password
+        );
 
-        if (cryptoPassword) {
-          // Decrypt cryptoPassword and store it in state
-          const cryptoPasswordDecrypted: any = await Crypto.decrypt(
-            cryptoPassword,
-            password
-          );
+        dispatch(setPassword(password));
+        dispatch(
+          setPgpKeys({ publicKey, privateKey: privateKeyArmorDecrypted })
+        );
 
-          dispatch(setCryptoPassword(cryptoPasswordDecrypted));
-        } else {
-          const privateKeyArmorDecrypted: any = await Crypto.decrypt(
-            privateKey,
-            password
-          );
-
-          dispatch(setPassword(password));
-          dispatch(
-            setPgpKeys({ publicKey, privateKey: privateKeyArmorDecrypted })
-          );
-        }
+        history.push('/');
       } else {
         if (response.status === 400) {
           handleError(response.data.error);

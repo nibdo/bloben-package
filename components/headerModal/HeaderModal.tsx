@@ -4,7 +4,6 @@ import './HeaderModal.scss';
 import { useHistory } from 'react-router';
 import TrashIcon from 'bloben-common/components/eva-icons/trash';
 import EvaIcons from 'bloben-common/components/eva-icons';
-import { useSelector } from 'react-redux';
 import { Context } from '../../context/store';
 const Icons = (props: any) => props.icons.map((icon: any) => icon);
 
@@ -15,9 +14,11 @@ interface IHeaderModalMobileProps {
   handleFavourite: any,
   isFavourite: any,
   handleSave: any,
+  handleEdit?: any,
   title?: string,
   icons: any;
 }
+// tslint:disable-next-line:cyclomatic-complexity
 const HeaderModalMobile = (props: IHeaderModalMobileProps) => {
   const {
     hasHeaderShadow,
@@ -26,6 +27,7 @@ const HeaderModalMobile = (props: IHeaderModalMobileProps) => {
     handleFavourite,
     isFavourite,
     handleSave,
+    handleEdit,
     title,
     icons
   } = props;
@@ -54,15 +56,21 @@ const HeaderModalMobile = (props: IHeaderModalMobileProps) => {
       </div>
       <div className={'header-modal__container--icons'}>
         {handleSave ? (
-          <IconButton onClick={handleSave}>
-            <EvaIcons.Check className={`icon-svg-primary${isDark ? '-dark' : ''}`} />
-          </IconButton>
-        ) : null}
+            <IconButton onClick={handleSave}>
+              <EvaIcons.Check className={`icon-svg-primary${isDark ? '-dark' : ''}`}/>
+            </IconButton>
+        ) : null
+        }
         {onDelete ? (
           <IconButton onClick={onDelete}>
             <TrashIcon className={`icon-svg${isDark ? '-dark' : ''}`} />
           </IconButton>
         ) : null}
+        {handleEdit ? (
+            <IconButton onClick={handleEdit}>
+              <EvaIcons.Edit className={`icon-svg-primary${isDark ? '-dark' : ''}`} />
+            </IconButton>
+        ) : null }
         {handleFavourite ? (
           <IconButton onClick={handleFavourite}>
             {isFavourite ? (
@@ -87,6 +95,7 @@ interface IHeaderModalViewProps {
   handleFavourite: any,
   isFavourite: any,
   handleSave: any,
+  handleEdit?: any,
   title?: string,
   icons: any;
   animation: string;
@@ -100,6 +109,7 @@ const HeaderModalView = (props: IHeaderModalViewProps) => {
     handleFavourite,
     isFavourite,
     handleSave,
+    handleEdit,
     title,
     animation,
   } = props;
@@ -122,6 +132,7 @@ const HeaderModalView = (props: IHeaderModalViewProps) => {
           handleFavourite={handleFavourite}
           isFavourite={isFavourite}
           handleSave={handleSave}
+          handleEdit={handleEdit}
           title={title}
         />
       </div>
@@ -133,6 +144,7 @@ interface IHeaderModalProps {
   hasHeaderShadow?: boolean;
   icons?: any;
   handleDelete?: any;
+  handleEdit?: any;
   handleFavourite?: any;
   isFavourite?: boolean;
   handleSave?: any;
@@ -148,6 +160,7 @@ const HeaderModal = (props: IHeaderModalProps) => {
     handleFavourite,
     isFavourite,
     handleSave,
+    handleEdit,
     title,
     onClose,
     absolute
@@ -185,6 +198,7 @@ const HeaderModal = (props: IHeaderModalProps) => {
       handleFavourite={handleFavourite}
       isFavourite={isFavourite}
       handleSave={handleSave}
+      handleEdit={handleEdit}
       title={title}
       animation={animation}
     />

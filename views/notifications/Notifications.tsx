@@ -8,25 +8,42 @@ import { useSelector } from 'react-redux';
 import ScrollView from '../../../bloben-common/components/scrollView/ScrollView';
 import { parseCssDark } from '../../../bloben-common/utils/common';
 import { ButtonBase } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+
+const INVITE_TYPE: string = 'INVITE';
+
+
+
 
 const getIconType = (notificationType: string, isDark: boolean): any => {
     const className: string = parseCssDark('svg-icon one-notification__icon', isDark)
 
     switch (notificationType) {
-        case ('invite'):
+        case (INVITE_TYPE):
             return <EvaIcons.PersonAddIcon className={className} />
         default:
             return <div/>
     }
 }
 
+const getClickAction = (notification: INotification, history: any): any => {
+    const {type, payload} = notification;
+
+    switch (type) {
+        case (INVITE_TYPE):
+            return () => history.push(`/${payload.type}/${payload.id}`)
+        default:
+    }
+}
+
 interface INotification {
     id: string;
     body: string;
-    notificationType: string;
+    type: string;
     parentId: string;
     parentTable: string;
     title: string;
+    payload: any;
     createdAt: string;
     updatedAt: string;
     wasRead: boolean;
@@ -38,11 +55,13 @@ interface IOneNotificationProps {
 }
 const OneNotification = (props: IOneNotificationProps) => {
     const {isDark, item} = props;
-    const {title, body, notificationType, wasRead} = item;
+    const {title, body, type, wasRead} = item;
+    const history: any = useHistory();
 
-    const icon: any = getIconType(notificationType, isDark);
+    const icon: any = getIconType(type, isDark);
+    const onClick: any = getClickAction(item, history);
 
-    return <ButtonBase className={'one-notification__container'}>
+    return <ButtonBase className={'one-notification__container'} onClick={onClick}>
         <div className={'one-notification__container-icon'}>
             {icon}
         </div>

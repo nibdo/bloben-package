@@ -23,11 +23,11 @@ const AnonymView = () => {
                 : <Route exact path={'/'} render={() => <IntroScreen />} />
             }
             <Route exact path={'/login'} render={() => <LoginAccount />} />
-            {/*<Route*/}
-            {/*    exact*/}
-            {/*    path={'/register'}*/}
-            {/*    render={() => <RegisterAccount />}*/}
-            {/*/>*/}
+            <Route
+                exact
+                path={'/register'}
+                render={() => <RegisterAccount />}
+            />
         </Router>
     </div>
   );

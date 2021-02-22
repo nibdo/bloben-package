@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import './NotificationSettings.scss';
+import './AlarmSettings.scss';
 import { ButtonBase, IconButton } from '@material-ui/core';
 import EvaIcons from '../../../bloben-common/components/eva-icons';
 import { HeightHook } from 'bloben-common/utils/layout';
@@ -12,14 +12,15 @@ import Dropdown from '../dropdown/Dropdown';
 import MyMenu from '../myMenu/MyMenu';
 import BottomSheet from 'bottom-sheet-react';
 import { Context } from '../../context/store';
+import { ICalendarSettings } from '../../../types/types';
 
-const NOTIFICATIONS_MAX_LENGTH: number = 4;
+const ALARMS_MAX_LENGTH: number = 4;
 
-const notificationSettings: any = [
+const alarmSettings: any = [
   {
     label: 'on start',
     value: {
-      reminderType: 'push',
+      alarmType: 'push',
       amount: 0,
       timeUnit: 'minutes',
     },
@@ -27,7 +28,7 @@ const notificationSettings: any = [
   {
     label: '10 minutes before',
     value: {
-      reminderType: 'push',
+      alarmType: 'push',
       amount: 10,
       timeUnit: 'minutes',
     },
@@ -35,7 +36,7 @@ const notificationSettings: any = [
   {
     label: 'hour before',
     value: {
-      reminderType: 'push',
+      alarmType: 'push',
       amount: 1,
       timeUnit: 'hours',
     },
@@ -43,7 +44,7 @@ const notificationSettings: any = [
   {
     label: 'day before',
     value: {
-      reminderType: 'push',
+      alarmType: 'push',
       amount: 1,
       timeUnit: 'days',
     },
@@ -163,19 +164,23 @@ const RadioButton = (props: IRadioButtonProps) => {
   );
 };
 
-interface ICustomNotificationOptionsProps {
+interface ICustomAlarmOptionsProps {
   handleCloseCustomMenu: any;
-  addNotification: any;
+  addAlarm: any;
 }
-const CustomNotificationOptions = (props: ICustomNotificationOptionsProps) => {
-  const { addNotification, handleCloseCustomMenu } = props;
+const CustomAlarmOptions = (props: ICustomAlarmOptionsProps) => {
+  const { addAlarm, handleCloseCustomMenu } = props;
+
+  const calendarSettings: ICalendarSettings = useSelector(
+      (state: any) => state.calendarSettings
+  );
 
   const defaultDropdownValue: any = {};
 
   const [valueIsOpen, openValue] = useState(defaultDropdownValue);
   const [value, setValue] = useState('hours');
   const [amount, setAmount] = useState(2);
-  const [type, setType] = useState('push');
+  const [type, setType] = useState(calendarSettings.defaultAlarmType);
 
   const [store] = useContext(Context);
 
@@ -199,9 +204,9 @@ const CustomNotificationOptions = (props: ICustomNotificationOptionsProps) => {
   };
 
   const saveNotification = (): void => {
-    addNotification({
+    addAlarm({
       label: 'custom',
-      value: { amount, reminderType: type, timeUnit: value },
+      value: { amount, alarmType: type, timeUnit: value },
     });
     handleCloseCustomMenu();
   };
@@ -255,18 +260,18 @@ const CustomNotificationOptions = (props: ICustomNotificationOptionsProps) => {
       </div>
       <h4 className={parseCssDark('repeat__subtitle', isDark)}>Notify via</h4>
       <div className={'repeat__row'}>
-        <RadioButton label={'Push'} isSelected={true} handleClick={() => {return}}/>
+        <RadioButton label={'Push'} isSelected={type === 'push'} handleClick={() => {setType('push')}}/>
         <div style={{ width: 25 }} />
-        {/*<RadioButton label={'Email'} isSelected={false} handleClick={() => {return}}/>*/}
+        <RadioButton label={'Email'} isSelected={type === 'email'} handleClick={() => {setType('email')}}/>
       </div>
     </div>
   );
 };
 
-interface IAddNotificationItemProps {
+interface IAddAlarmItemProps {
   onClick: any;
 }
-const AddNotificationItem = (props: IAddNotificationItemProps) => {
+const AddAlarmItem = (props: IAddAlarmItemProps) => {
   const { onClick } = props;
 
   const [store] = useContext(Context);
@@ -291,7 +296,7 @@ const AddNotificationItem = (props: IAddNotificationItemProps) => {
 };
 
 // TODO add custom notification text
-const parseNotificationText = (amount: number, timeUnit: string): string => {
+const parseAlarmText = (amount: number, timeUnit: string): string => {
   switch (amount) {
     case 0:
       return 'on start';
@@ -302,18 +307,18 @@ const parseNotificationText = (amount: number, timeUnit: string): string => {
   }
 };
 
-interface IOneNotificationProps {
+interface IOneAlarmProps {
   item: any;
-  removeNotification: any;
+  removeAlarm: any;
 }
-const OneNotification = (props: IOneNotificationProps) => {
-  const { item, removeNotification } = props;
+const OneAlarm = (props: IOneAlarmProps) => {
+  const { item, removeAlarm } = props;
 
   const [store] = useContext(Context);
 
   const {isDark} = store;
 
-  const notificationText: string = parseNotificationText(
+  const notificationText: string = parseAlarmText(
     item.amount,
     item.timeUnit
   );
@@ -330,7 +335,7 @@ const OneNotification = (props: IOneNotificationProps) => {
           </p>
         </div>
         <div className={'event_detail__button-right'}>
-          <IconButton onClick={() => removeNotification(item)}>
+          <IconButton onClick={() => removeAlarm(item)}>
             <EvaIcons.Cross className={parseCssDark('icon-svg', isDark)} />
           </IconButton>
         </div>
@@ -339,43 +344,43 @@ const OneNotification = (props: IOneNotificationProps) => {
   );
 };
 
-const renderNotification = (data: any, removeNotification: any) =>
+const renderAlarm = (data: any, removeAlarm: any) =>
   data.map((item: any) => (
-    <OneNotification
+    <OneAlarm
       key={item.id}
       item={item}
-      removeNotification={removeNotification}
+      removeAlarm={removeAlarm}
     />
   ));
 
-interface INotificationsProps {
-  notifications: any;
-  removeNotification: any;
+interface IAlarmsProps {
+  alarms: any;
+  removeAlarm: any;
 }
-const Notifications = (props: INotificationsProps) => {
-  const { notifications, removeNotification } = props;
+const Alarms = (props: IAlarmsProps) => {
+  const { alarms, removeAlarm } = props;
 
-  return renderNotification(
-      notifications,
-      removeNotification
+  return renderAlarm(
+      alarms,
+      removeAlarm
   );
 };
 
-interface INotificationSettingsProps {
+interface IAlarmSettingsProps {
   anchor?: any;
   selected?: any;
-  notifications: any;
-  addNotification: any;
-  removeNotification: any;
+  alarms: any;
+  addAlarm: any;
+  removeAlarm: any;
   coordinates: any;
   setCoordinates: any;
 }
-const NotificationSettings = (props: INotificationSettingsProps) => {
+const AlarmSettings = (props: IAlarmSettingsProps) => {
   const {
     selected,
-    notifications,
-    addNotification,
-    removeNotification,
+    alarms,
+    addAlarm,
+    removeAlarm,
     coordinates,
     setCoordinates,
   } = props;
@@ -385,10 +390,25 @@ const NotificationSettings = (props: INotificationSettingsProps) => {
 
   const {isDark, isMobile} = store;
 
+  const calendarSettings: ICalendarSettings = useSelector(
+      (state: any) => state.calendarSettings
+  );
+
   const [menuIsOpen, openMenu] = useState(false);
   const [isCustomOpen, openCustomMenu] = useState(false);
-  const noNewNotifications: boolean =
-    notifications && notifications.length === NOTIFICATIONS_MAX_LENGTH;
+  const noNewAlarms: boolean =
+    alarms && alarms.length === ALARMS_MAX_LENGTH;
+
+  const alarmSettingsDefault: any = calendarSettings.defaultAlarmType !== 'push' ? alarmSettings.map((item: any) => {
+    if (item.value === 'custom') {
+      return item;
+    }
+    const itemDefault: any = item;
+
+    itemDefault.value.alarmType = calendarSettings.defaultAlarmType;
+
+    return itemDefault;
+  }) : alarmSettings;
 
   const parseSelectClick = (item: any) => {
     if (item.label === 'custom') {
@@ -397,25 +417,25 @@ const NotificationSettings = (props: INotificationSettingsProps) => {
       return;
     }
 
-    addNotification(item);
+    addAlarm(item);
   };
 
   const handleCloseMenu = (): void => openMenu(false);
   const handleCloseCustomMenu = (): void => openCustomMenu(false);
 
   return (
-    <div className={parseCssDark(`event_detail__wrapper-row ${!noNewNotifications ? 'no-row' : ''}`, isDark)}>
-      {!noNewNotifications ? (
-        <AddNotificationItem
+    <div className={parseCssDark(`event_detail__wrapper-row ${!noNewAlarms ? 'no-row' : ''}`, isDark)}>
+      {!noNewAlarms ? (
+        <AddAlarmItem
           onClick={() => {
             openMenu(true);
           }}
         />
       ) : null}
-      {notifications && notifications.length > 0 ? (
-        <Notifications
-          notifications={notifications}
-          removeNotification={removeNotification}
+      {alarms && alarms.length > 0 ? (
+        <Alarms
+            alarms={alarms}
+          removeAlarm={removeAlarm}
         />
       ) : null}
       {menuIsOpen ? (
@@ -430,7 +450,7 @@ const NotificationSettings = (props: INotificationSettingsProps) => {
               select={parseSelectClick}
               selected={selected}
               handleClose={handleCloseMenu}
-              data={notificationSettings}
+              data={alarmSettingsDefault}
             />
           </DropdownWrapper>
         ) : (
@@ -440,7 +460,7 @@ const NotificationSettings = (props: INotificationSettingsProps) => {
               select={parseSelectClick}
               selected={selected}
               handleClose={handleCloseMenu}
-              data={notificationSettings}
+              data={alarmSettingsDefault}
             />
           </ModalSmall>
         )
@@ -455,8 +475,8 @@ const NotificationSettings = (props: INotificationSettingsProps) => {
           isExpandable={false}
           onClose={handleCloseCustomMenu}
         >
-          <CustomNotificationOptions
-            addNotification={addNotification}
+          <CustomAlarmOptions
+            addAlarm={addAlarm}
             handleCloseCustomMenu={handleCloseCustomMenu}
           />
         </BottomSheet>
@@ -465,4 +485,4 @@ const NotificationSettings = (props: INotificationSettingsProps) => {
   );
 };
 
-export default NotificationSettings;
+export default AlarmSettings;

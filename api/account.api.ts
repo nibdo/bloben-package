@@ -2,10 +2,9 @@ import { AxiosResponse } from 'axios';
 
 import Axios from 'bloben-common/utils/axios';
 import { TSrpCredentialsForAuthType } from '../types/srp.types';
+import { IPatchUpdate } from '../types/common.types';
 
 const USER_PATH_URL: string = 'user';
-
-type checkUsernameType = { username: string };
 
 const AccountApi = {
   /*
@@ -50,12 +49,17 @@ const AccountApi = {
       return err;
     }
   },
-
+  /*
+   * Get user profile
+   */
+  getUserProfile: async () =>
+    Axios.get(
+          `/${USER_PATH_URL}/profile`),
   /*
    * Check if username is free
    */
-  checkUsername: async (data: checkUsernameType): Promise<AxiosResponse> =>
-    Axios.post(`/${USER_PATH_URL}/check-username`, data),
+  checkUsername: async (data: any): Promise<AxiosResponse> =>
+    Axios.get(`/${USER_PATH_URL}/username/${data.username}`),
 
   /*
    * Log in user
@@ -75,6 +79,13 @@ const AccountApi = {
   delete: async (data: TSrpCredentialsForAuthType): Promise<AxiosResponse> => {
     return Axios.delete(`/${USER_PATH_URL}/delete`, data);
   },
+  /**
+   * Update user profile
+   * @param data
+   */
+  updateProfile: async (data: IPatchUpdate): Promise<AxiosResponse> =>
+      Axios.patch(`/${USER_PATH_URL}/profile`, data),
+
 };
 
 export default AccountApi;

@@ -13,7 +13,7 @@ import { v4 } from 'uuid';
 import GetPin from '../views/getPin/GetPin';
 import { logger } from 'bloben-common/utils/common';
 import { LocalForage } from '../utils/LocalForage';
-import OpenPgp, { PgpKeys } from '../utils/OpenPgp';
+import OpenPgp, { PgpKeys } from '../../bloben-utils/utils/OpenPgp';
 import { MAX_PIN_UNLOCK_ATTEMPTS } from '../components/pinInput/PinInput';
 import { logOut } from '../utils/logout';
 import { Context } from '../context/store';

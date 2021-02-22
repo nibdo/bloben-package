@@ -166,6 +166,10 @@ const getDropdownType = (
   if (variant === 'simple') {
     return renderSimpleItems(values, selectedValue, handleClick);
   }
+
+  if (type === 'children') {
+    return values
+  }
 };
 
 interface IDropdownViewProps {
@@ -256,7 +260,7 @@ const DropdownDesktopView = (props: IDropdownDesktopViewProps) => {
 
   const handleImportClick = (e: any) => {
     closeDropdown(e);
-    history.push('/calendar/events/import');
+    history.push('/events/import');
   };
 
   return (

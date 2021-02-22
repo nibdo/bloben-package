@@ -18,6 +18,7 @@ interface IInputProps {
   autoComplete?: any;
   handleBlur?: any;
   submitEnter?: any;
+  disabled?: boolean;
 }
 export const Input = (props: IInputProps) => {
   const {
@@ -35,6 +36,7 @@ export const Input = (props: IInputProps) => {
     autoComplete,
     handleBlur,
     submitEnter,
+    disabled = false
   } = props;
 
   const [store] = useContext(Context);
@@ -48,6 +50,7 @@ export const Input = (props: IInputProps) => {
             ? className
             : `input__text${size ? size : ''}${isDark ? '--dark' : ''}`
         }
+        disabled={disabled}
         name={name}
         type={type}
         placeholder={placeholder}

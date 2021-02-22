@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setIsAppStarting, setIsLoading } from '../../../redux/actions';
 import MobileTitle from '../../components/title/Title';
 import { LocalForage } from '../../utils/LocalForage';
-import OpenPgp, { PgpKeys } from '../../utils/OpenPgp';
+import OpenPgp, { PgpKeys } from '../../../bloben-utils/utils/OpenPgp';
 import PinInput, {
   MAX_PIN_UNLOCK_ATTEMPTS,
   PIN_CODE_LENGTH,

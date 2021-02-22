@@ -15,14 +15,14 @@ import {
 } from 'bloben-package/types/srp.types';
 import {
  setIsAppStarting,
-} from '../../../../redux/actions';
+} from '../../../../../redux/actions';
 import { HTTP_STATUS_BAD_REQUEST } from 'bloben-package/utils/common';
 import { logger, parseCssDark } from 'bloben-common/utils/common';
-import { logOut } from '../../../utils/logout';
-import MobileTitle from '../../title/Title';
-import StateReducer from '../../../utils/state-reducer';
-import HeaderModal from '../../headerModal/HeaderModal';
-import { Context } from '../../../context/store';
+import { logOut } from '../../../../utils/logout';
+import MobileTitle from '../../../../components/title/Title';
+import StateReducer from '../../../../utils/state-reducer';
+import HeaderModal from '../../../../components/headerModal/HeaderModal';
+import { Context } from '../../../../context/store';
 const {  WRONG_PASSWORD } = errors;
 
 const rfc5054: any = {

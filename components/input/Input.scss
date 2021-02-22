@@ -7,7 +7,14 @@ flex-direction: column;
 position: relative;
 width: 100%;
 }
-
+.input__wrapper-border {
+  box-shadow: inset 0px 0px 0px 1px $GRAY_400;
+  -webkit-box-shadow: inset 0px 0px 0px 1px $GRAY_400;
+  //height: 65px;
+  font-size: 1.6rem !important;
+  border-radius: 6px;
+  max-height: 50%;
+}
 
 .input__text {
   width: 100%;

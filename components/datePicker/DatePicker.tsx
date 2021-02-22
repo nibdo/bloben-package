@@ -22,7 +22,7 @@ import { Context } from '../../context/store';
 import { parseCssDark } from '../../../bloben-common/utils/common';
 import { DateTime } from 'luxon';
 import { getMonthDays } from '../../../components/calendarView/calendar-common';
-import LuxonHelper from '../../utils/LuxonHelper';
+import LuxonHelper from '../../../bloben-utils/utils/LuxonHelper';
 
 const parseMonths = (monthNum: number): string => {
   switch (monthNum) {
