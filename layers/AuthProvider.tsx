@@ -19,7 +19,7 @@ const AuthProvider = () => {
 
   const getPasswordFromIFrame = async () => {
     window.onmessage = async (e: any) => {
-      if (e.origin === 'http://localhost:4000') {
+      if (e.origin === process.env.REACT_APP_ACCOUNT_URL) {
         const payload: any = JSON.parse(e.data);
         console.log(payload);
         if (payload['BLOBEN_PASSWORD']) {
