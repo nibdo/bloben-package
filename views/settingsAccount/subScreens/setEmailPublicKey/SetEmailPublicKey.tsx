@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useReducer, useRef, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import { AxiosResponse } from 'axios';
@@ -18,7 +24,7 @@ import { Input } from '../../../../components/input/Input';
 import { InputBorder } from '../../../../components/input/InputBorder';
 import { ButtonBase } from '@material-ui/core';
 import { HeightHook } from '../../../../../bloben-common/utils/layout';
-import { IUserProfile } from '../../../../types/common.types';
+import { UserProfile } from '../../../../types/common.types';
 
 interface IInputContainerProps {
   input: string;
@@ -31,10 +37,18 @@ interface IInputContainerProps {
 }
 
 const InputContainer = (props: IInputContainerProps) => {
-  const { onChange, input, handleSet, handleDelete, handleInputClick, onFileChange, inputFile } = props;
+  const {
+    onChange,
+    input,
+    handleSet,
+    handleDelete,
+    handleInputClick,
+    onFileChange,
+    inputFile,
+  } = props;
 
-  const userProfile: IUserProfile = useSelector(
-      (state: any) => state.userProfile
+  const userProfile: UserProfile = useSelector(
+    (state: any) => state.userProfile
   );
   const { emailPublicKey } = userProfile;
 
@@ -44,54 +58,52 @@ const InputContainer = (props: IInputContainerProps) => {
 
   const height: number = HeightHook();
 
-
   return (
     <div className={'settings__container-input'}>
-      <div style={{height: '50%'}}>
-      {userProfile.emailPublicKey ? (
-        <InputBorder
-          name={'publicKey'}
-          defaultValue={emailPublicKey as string}
-          value={emailPublicKey as string}
-          onChange={onChange}
-          rows={height / 2 / 25}
-          autoFocus={false}
-          autoComplete={'off'}
-          multiline={true}
-        />
-      ) : (
-        <InputBorder
-        type='text'
-        name='publicKey'
-        placeholder='Paste your public key for email'
-        autoComplete={'off'}
-        className={parseCssDark('event_detail__input', isDark)}
-        onChange={onChange}
-        value={input}
-        rows={height / 2 / 25}
-        multiline={true}
-        />
-      )}</div>
+      <div style={{ height: '50%' }}>
+        {userProfile.emailPublicKey ? (
+          <InputBorder
+            name={'publicKey'}
+            defaultValue={emailPublicKey as string}
+            value={emailPublicKey as string}
+            onChange={onChange}
+            rows={height / 2 / 25}
+            autoFocus={false}
+            autoComplete={'off'}
+            multiline={true}
+          />
+        ) : (
+          <InputBorder
+            type="text"
+            name="publicKey"
+            placeholder="Paste your public key for email"
+            autoComplete={'off'}
+            className={parseCssDark('event_detail__input', isDark)}
+            onChange={onChange}
+            value={input}
+            rows={height / 2 / 25}
+            multiline={true}
+          />
+        )}
+      </div>
       <Landing.Separator />
-      {userProfile.emailPublicKey ? null :
-          <ButtonBase
-              className={'landing__button-secondary'}
-              onClick={handleInputClick}
-          >
-            <p>
-              Import public key from file
-            </p>
-            <input
-                className={'event_uploader__input'}
-                type="file"
-                id="file"
-                ref={inputFile}
-                accept={'.asc'}
-                // autoFocus={true}
-                onChange={onFileChange}
-            />
-          </ButtonBase>
-      }
+      {userProfile.emailPublicKey ? null : (
+        <ButtonBase
+          className={'landing__button-secondary'}
+          onClick={handleInputClick}
+        >
+          <p>Import public key from file</p>
+          <input
+            className={'event_uploader__input'}
+            type="file"
+            id="file"
+            ref={inputFile}
+            accept={'.asc'}
+            // autoFocus={true}
+            onChange={onFileChange}
+          />
+        </ButtonBase>
+      )}
       <Landing.Separator />
       <Landing.Separator />
       {!emailPublicKey ? (
@@ -124,13 +136,19 @@ interface IDeleteAccountView {
 }
 
 const SetEmailPublicKeyView = (props: IDeleteAccountView) => {
-  const { onChange, input, handleSet, handleDelete, onFileChange, handleInputClick, inputFile } = props;
+  const {
+    onChange,
+    input,
+    handleSet,
+    handleDelete,
+    onFileChange,
+    handleInputClick,
+    inputFile,
+  } = props;
 
   const [store] = useContext(Context);
 
   const { isDark } = store;
-
-
 
   return (
     <div className={parseCssDark('column', isDark)}>
@@ -174,15 +192,17 @@ const SetEmailPublicKey = () => {
 
   const handleDelete = async () => {
     try {
-      const resp: AxiosResponse = await AccountApi.updateProfile({ key: 'publicKey', value: null});
+      const resp: AxiosResponse = await AccountApi.updateProfile({
+        key: 'publicKey',
+        value: null,
+      });
 
       if (resp.data.code === 1000) {
-        setInput('')
+        setInput('');
 
         setContext('showSnackbar', {
           text: 'Your public key was deleted',
         });
-
       }
     } catch (error) {
       setContext('showSnackbar', {
@@ -193,20 +213,22 @@ const SetEmailPublicKey = () => {
 
   const handleSet = async () => {
     try {
-      const resp: AxiosResponse = await AccountApi.updateProfile({ key: 'publicKey', value: input});
+      const resp: AxiosResponse = await AccountApi.updateProfile({
+        key: 'publicKey',
+        value: input,
+      });
 
-    if (resp.data.code === 1000) {
+      if (resp.data.code === 1000) {
+        setContext('showSnackbar', {
+          text: 'Your public key was set',
+        });
+      }
+    } catch (error) {
       setContext('showSnackbar', {
-        text: 'Your public key was set',
+        text: 'Error: Try again',
       });
     }
-  } catch (error) {
-    setContext('showSnackbar', {
-      text: 'Error: Try again',
-    });
-  }
   };
-
 
   /**
    * Validate file type

@@ -15,7 +15,7 @@ import EmailApi, { IGetEmailDTO } from '../../../../api/email.api';
 import EvaIcons from '../../../../../bloben-common/components/eva-icons';
 import { STATUS_OK } from '../../../../utils/common';
 import AccountApi from '../../../../api/account.api';
-import { IUserProfile } from '../../../../types/common.types';
+import { UserProfile } from '../../../../types/common.types';
 
 interface IInputContainerProps {
   input: string;
@@ -27,8 +27,8 @@ interface IInputContainerProps {
 const InputContainer = (props: IInputContainerProps) => {
   const { onChange, input, handleSet, handleDelete } = props;
 
-  const userProfile: IUserProfile = useSelector(
-      (state: any) => state.userProfile
+  const userProfile: UserProfile = useSelector(
+    (state: any) => state.userProfile
   );
   const { publicName } = userProfile;
 
@@ -36,12 +36,11 @@ const InputContainer = (props: IInputContainerProps) => {
 
   const { isDark } = store;
 
-
   return (
     <div className={'settings__container-input'}>
       {publicName ? (
         <InputForm
-            label={'Public name'}
+          label={'Public name'}
           name={'publicName'}
           defaultValue={publicName as string}
           value={publicName as string}
@@ -135,15 +134,17 @@ const SetEmailPublicKey = () => {
 
   const handleDelete = async () => {
     try {
-      const resp: AxiosResponse = await AccountApi.updateProfile({ key: 'publicName', value: null});
+      const resp: AxiosResponse = await AccountApi.updateProfile({
+        key: 'publicName',
+        value: null,
+      });
 
       if (resp.data.code === 1000) {
-        setInput('')
+        setInput('');
 
         setContext('showSnackbar', {
           text: 'Your public name was deleted',
         });
-
       }
     } catch (error) {
       setContext('showSnackbar', {
@@ -154,18 +155,21 @@ const SetEmailPublicKey = () => {
 
   const handleSet = async () => {
     try {
-    const resp: AxiosResponse = await AccountApi.updateProfile({key: 'publicName', value: input} );
+      const resp: AxiosResponse = await AccountApi.updateProfile({
+        key: 'publicName',
+        value: input,
+      });
 
-    if (resp.data.code === 1000) {
+      if (resp.data.code === 1000) {
+        setContext('showSnackbar', {
+          text: 'Your public name was set',
+        });
+      }
+    } catch (error) {
       setContext('showSnackbar', {
-        text: 'Your public name was set',
+        text: 'Error: Try again',
       });
     }
-  } catch (error) {
-    setContext('showSnackbar', {
-      text: 'Error: Try again',
-    });
-  }
   };
 
   return (

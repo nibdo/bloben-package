@@ -1,21 +1,24 @@
-import { reduxStore } from '../../bloben-package/layers/ReduxLayer';
+import { reduxStore } from '../layers/ReduxProvider';
 import OpenPgp, { PgpKeys } from '../../bloben-utils/utils/OpenPgp';
 import { addNotification, setNotificationsSyncLog } from '../../redux/actions';
 import { AxiosResponse } from 'axios';
 import { ISyncLog } from '../../types/types';
-import Notification, { INotification } from '../../bloben-utils/models/Notification';
+import Notification, {
+  INotification,
+} from '../../bloben-utils/models/Notification';
 import NotificationApi from '../api/notification.api';
 import { cloneDeep } from '../../utils/common';
 import { findInArrayById } from '../utils/common';
+import { User } from '../../bloben-utils/models/User';
 
 const decryptItem = async (
   item: any,
-  pgpKeys: PgpKeys,
+  user: User,
   password: string
 ): Promise<any> => {
   let decryptedData: any = await OpenPgp.decrypt(
-    pgpKeys.publicKey,
-    pgpKeys.privateKey,
+    user.publicKey,
+    user.privateKey,
     password,
     item.data
   );
@@ -31,7 +34,7 @@ const SyncNotification: any = {
   getAll: async () => {
     const store: any = reduxStore.getState();
     const password: string = store.password;
-    const pgpKeys: PgpKeys = store.pgpKeys;
+    const user: User = store.user;
     const syncLog: ISyncLog = store.syncLog;
     const stateClone: any = cloneDeep(store.notifications);
 
@@ -46,7 +49,7 @@ const SyncNotification: any = {
     for (const item of data) {
       const { id } = item;
 
-      const notification: any = await decryptItem(item, pgpKeys, password);
+      const notification: any = await decryptItem(item, user, password);
 
       const notificationInState: INotification | null = await findInArrayById(
         stateClone,
@@ -62,13 +65,13 @@ const SyncNotification: any = {
   addNotification: async (id: string) => {
     const store: any = reduxStore.getState();
     const password: string = store.password;
-    const pgpKeys: PgpKeys = store.pgpKeys;
+    const user: User = store.user;
 
     const response: AxiosResponse = await NotificationApi.getNotificationById(
       id
     );
 
-    const calendar: any = await decryptItem(response.data, pgpKeys, password);
+    const calendar: any = await decryptItem(response.data, user, password);
 
     reduxStore.dispatch(addNotification(calendar));
   },

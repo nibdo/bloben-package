@@ -1,24 +1,30 @@
 import React, { useContext, useEffect } from 'react';
-import EncryptionLayer from './EncryptionLayer';
+
 import { Context } from '../context/store';
 import { MOBILE_MAX_WIDTH, parseCssDark } from 'bloben-common/utils/common';
 import { WidthHook } from 'bloben-common/utils/layout';
 import { LocalForage } from '../utils/LocalForage';
 import {
-    LIGHT_THEME,
-    changeTheme,
-    setThemeDefault,
-    IThemeValue, SYSTEM_THEME, DARK_THEME,
+  LIGHT_THEME,
+  changeTheme,
+  setThemeDefault,
+  IThemeValue,
+  SYSTEM_THEME,
+  DARK_THEME,
 } from '../utils/changeTheme';
+
+interface ContextProviderProps {
+  children: any;
+}
 
 /**
  * Setup init context options
  * @constructor
  */
-const ContextLayer = () => {
+const ContextProvider = (props: ContextProviderProps) => {
   const [store, dispatch] = useContext(Context);
 
-  const {isDark} = store;
+  const { isDark } = store;
 
   const width = WidthHook();
 
@@ -54,7 +60,7 @@ const ContextLayer = () => {
 
       // Ignore system settings here, set theme in listener
       if (themeLocalValue && themeLocalValue !== SYSTEM_THEME) {
-          await changeTheme(themeLocalValue, setContext)
+        await changeTheme(themeLocalValue, setContext);
       }
     };
 
@@ -67,24 +73,26 @@ const ContextLayer = () => {
   useEffect(() => {
     window.matchMedia('(prefers-color-scheme: dark)').addListener(async (e) => {
       // First check if system settings for theme are set
-        // Try to load theme from database
-        const themeLocalValue: IThemeValue | null = await LocalForage.getItem(
-            'theme'
-        );
+      // Try to load theme from database
+      const themeLocalValue: IThemeValue | null = await LocalForage.getItem(
+        'theme'
+      );
 
-        if (themeLocalValue && themeLocalValue === SYSTEM_THEME) {
-            if (e.matches) {
-                // Dark
-                await changeTheme(DARK_THEME, setContext);
-            } else {
-                // Light
-                await changeTheme(LIGHT_THEME, setContext);
-            }
+      if (themeLocalValue && themeLocalValue === SYSTEM_THEME) {
+        if (e.matches) {
+          // Dark
+          await changeTheme(DARK_THEME, setContext);
+        } else {
+          // Light
+          await changeTheme(LIGHT_THEME, setContext);
         }
+      }
     });
   }, []);
 
-    return <div className={parseCssDark('root-wrapper', isDark)}><EncryptionLayer /></div>;
+  return (
+    <div className={parseCssDark('root-wrapper', isDark)}>{props.children}</div>
+  );
 };
 
-export default ContextLayer;
+export default ContextProvider;

@@ -13,9 +13,8 @@ import HeaderModal from '../../../../components/headerModal/HeaderModal';
 import { Context } from '../../../../context/store';
 import EmailApi, { IGetEmailDTO } from '../../../../api/email.api';
 import EvaIcons from '../../../../../bloben-common/components/eva-icons';
-import { STATUS_OK } from '../../../../utils/common';
-import { IUserProfile } from '../../../../types/common.types';
 import AccountApi from '../../../../api/account.api';
+import { UserProfile } from '../../../../types/common.types';
 
 interface IInputContainerProps {
   emailInput: string;
@@ -27,15 +26,14 @@ interface IInputContainerProps {
 const InputContainer = (props: IInputContainerProps) => {
   const { onChange, emailInput, setEmail, deleteEmail } = props;
 
-  const userProfile: IUserProfile = useSelector(
-      (state: any) => state.userProfile
+  const userProfile: UserProfile = useSelector(
+    (state: any) => state.userProfile
   );
   const { email, emailIsVerified } = userProfile;
 
   const [store] = useContext(Context);
 
   const { isDark } = store;
-
 
   return (
     <div className={'settings__container-input'}>
@@ -163,7 +161,10 @@ const SetEmail = () => {
 
   const deleteEmail = async () => {
     try {
-      const resp: AxiosResponse = await AccountApi.updateProfile({key: 'email', value: null});
+      const resp: AxiosResponse = await AccountApi.updateProfile({
+        key: 'email',
+        value: null,
+      });
 
       if (resp.data.code === 1000) {
         setContext('showSnackbar', {
@@ -171,7 +172,7 @@ const SetEmail = () => {
         });
 
         // await getEmailStatus();
-        setEmailInput('')
+        setEmailInput('');
       }
     } catch (error) {
       setContext('showSnackbar', {
@@ -181,7 +182,10 @@ const SetEmail = () => {
   };
 
   const setEmail = async () => {
-    const resp: AxiosResponse = await AccountApi.updateProfile({key: 'email', value: emailInput});
+    const resp: AxiosResponse = await AccountApi.updateProfile({
+      key: 'email',
+      value: emailInput,
+    });
 
     setContext('showSnackbar', {
       text: 'Check your mailbox for verification email',

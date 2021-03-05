@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import 'bloben-common/index.scss';
-import AppLayer from 'layers/AppLayer';
 import { createStore, Store } from 'redux';
 import { Provider } from 'react-redux';
 
+import 'bloben-common/index.scss';
+
 import rootReducer from 'redux/reducers';
 import { loadState, saveState } from '../../redux/localstorage';
-import { logger } from '../../bloben-common/utils/common';
-import { DateTime } from 'luxon';
+import AuthProvider from './AuthProvider';
 
 export let reduxStore: Store;
 
-interface IReduxLayerProps {
+interface ReduxProviderProps {
   isDecrypted: boolean;
   state?: any;
 }
-const ReduxLayer = (props: IReduxLayerProps) => {
+const ReduxProvider = (props: ReduxProviderProps) => {
   const { isDecrypted, state } = props;
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -26,7 +25,6 @@ const ReduxLayer = (props: IReduxLayerProps) => {
 
     setIsLoaded(true);
 
-    // TODO remove some date keys from triggering save
     reduxStore.subscribe(() => {
       saveState(reduxStore.getState());
     });
@@ -37,17 +35,17 @@ const ReduxLayer = (props: IReduxLayerProps) => {
       // REDUX STORE
       initReduxStore();
     }
-  },        [isDecrypted]);
+  }, [isDecrypted]);
 
   return isLoaded ? (
     <Provider store={reduxStore}>
       {isDecrypted ? (
         reduxStore.getState().calendarView ? (
-          <AppLayer initPath={window.location.href} />
+          <AuthProvider />
         ) : null
       ) : null}
     </Provider>
   ) : null;
 };
 
-export default ReduxLayer;
+export default ReduxProvider;

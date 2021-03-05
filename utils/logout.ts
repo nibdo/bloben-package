@@ -1,6 +1,7 @@
-import Axios from 'bloben-common/utils/axios';
 import { Dispatch } from 'redux';
+
 import { LocalForage } from './LocalForage';
+import AccountApi from '../../bloben-utils/api/account.api';
 // tslint:disable-next-line:no-require-imports no-var-requires
 const openpgp = require('openpgp');
 
@@ -13,16 +14,15 @@ export const logOut = async (dispatch?: Dispatch) => {
   await LocalForage.removeItem('isStorageEncrypted');
   await LocalForage.removeItem('root');
   await LocalForage.removeItem('encryptionType');
-  await LocalForage.removeItem('isReactNative');
   await LocalForage.removeItem('pinCodeAttempts');
   await LocalForage.removeItem('systemKeys');
   await LocalForage.removeItem('isDark');
 
+  await LocalForage.clear();
+
   if (dispatch) {
-    dispatch({type: 'USER_LOGOUT'});
+    dispatch({ type: 'USER_LOGOUT' });
   }
 
-  Axios.get('/user/logout');
-  // @ts-ignore
-  setTimeout(() => {window.location.assign(process.env.REACT_APP_URL)}, 10)
+  await AccountApi.logout();
 };
